@@ -14,6 +14,17 @@ const JoditEditor = dynamic(() => import('jodit-react'), {
   ssr: false, // Disable server-side rendering for this component
 });
 const BeststoresForm = () => {
+
+  const [itemdiscount, setItemDiscount] = useState('');
+  const [itemlink, setItemLink] = useState('');
+  const [itemdescription, setItemDescription] = useState('');
+  const [itemname, setItemName] = useState('');
+  const [itemdiscounttext,setItemDiscountText] = useState('');
+  const [itemimage, setItemImage] = useState(null);
+  const [items, setItems] = useState([]);
+  const [itemeditId, setItemEditId] = useState(null);
+  const [itemisOpen, setItemIsOpen] = useState(false);
+
   const [category, setCategory] = useState('');
 
   const [title, setTitle] = useState('');
@@ -67,7 +78,80 @@ const BeststoresForm = () => {
     fetchAds();
     fetchBlogs();
     fetchfeaturedstore();
+    fetchItems();
   }, [minOffers, maxOffers, minCoupons, maxCoupons]);
+
+  const fetchItems = async () => {
+    try {
+      let itemsQuery = collection(db, 'beststoreitem');
+  
+      const itemsSnapshot = await getDocs(itemsQuery);
+      const itemsList = itemsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      console.log("Fetched Items:", itemsList); // Check if items are fetched correctly
+      setItems(itemsList); // Update state with fetched items
+    } catch (error) {
+      console.error('Error fetching items: ', error);
+      toast.error('Failed to fetch items. Please try again.');
+    }
+  };
+  
+  const handleItemSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      let imageUrl = '';
+      if (itemimage) {
+        const storage = getStorage();
+        const storageRef = ref(storage, `images/${itemimage.name}`);
+        await uploadBytes(storageRef, itemimage);
+        imageUrl = await getDownloadURL(storageRef);
+      }
+
+      if (editId) {
+        const itemDocRef = doc(db, 'beststoreitem', editId);
+        await updateDoc(itemDocRef, { itemdiscount, itemdescription, itemname, itemdiscounttext, imageUrl,itemlink });
+        toast.success('Item updated successfully!');
+      } else {
+        const itemsCollectionRef = collection(db, 'beststoreitem');
+        await addDoc(itemsCollectionRef, { itemdiscount, itemdescription, itemname,itemdiscounttext, imageUrl,itemlink });
+        toast.success('Item added successfully!');
+      }
+
+      setItemDiscount('');
+      setItemLink('');
+      setItemDescription('');
+      setItemName('');
+      setItemDiscountText('');
+      setItemImage(null);
+      setItemEditId(null);
+      setItemIsOpen(false);
+      fetchItems();
+    } catch (error) {
+      console.error('Error adding/updating document: ', error);
+      toast.error('Failed to add/update item. Please try again.');
+    }
+  };
+  const handleItemEdit = (item) => {
+    setItemDiscount(item.itemdiscount);
+    setItemLink(item.itemlink);
+    setItemDescription(item.itemdescription);
+    setItemName(item.itemname);
+    setItemDiscountText(item.itemdiscounttext);
+    setItemImage(item.imageUrl);
+    setItemEditId(item.id);
+    setItemIsOpen(true);
+  };
+
+  const handleItemDelete = async (id) => {
+    try {
+      await deleteDoc(doc(db, 'beststoreitem', id));
+      toast.success('Item deleted successfully!');
+      fetchItems();
+    } catch (error) {
+      console.error('Error deleting document: ', error);
+      toast.error('Failed to delete item. Please try again.');
+    }
+  };
 
   const fetchfeaturedstore = async () => {
     try {
@@ -427,6 +511,12 @@ const BeststoresForm = () => {
           Add Store
         </button>
         <button
+          className="px-4 py-2 mb-4 mr-4 font-bold text-white bg-green-500 rounded hover:bg-green-700 focus:outline-none focus:shadow-outline"
+          onClick={() => setItemIsOpen(true)}
+        >
+          Add coupons
+        </button>
+        <button
           className="px-4 py-2 mb-4 mr-4 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
           onClick={() => setFeaturedIsOpen(true)}
         >
@@ -580,6 +670,48 @@ const BeststoresForm = () => {
             </tbody>
           </table>
         </div>
+        <h2 className="mt-8 mb-4 text-2xl font-bold text-center">coupons</h2>
+        <div className="overflow-x-auto">
+      <table className="w-full border table-auto">
+        <thead>
+          <tr className='border-b'>
+            <th className="px-4 py-2">Name</th>
+            <th className="px-4 py-2">Discount</th>
+            <th className="px-4 py-2">Description</th>
+            <th className="px-4 py-2">Discount text</th>
+            <th className="px-4 py-2">Image</th>
+            <th className="px-4 py-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.map(item => (
+            <tr key={item.id}>
+              <td className="px-4 py-2">{item.itemname}</td>
+              <td className="px-4 py-2">{item.itemdiscount}</td>
+              <td className="px-4 py-2">{item.itemdescription}</td>
+              <td className="px-4 py-2">{item.itemdiscounttext}</td>
+              <td className="px-4 py-2">
+                {item.imageUrl && <img src={item.imageUrl} alt={item.itemname} className="object-cover w-16 h-16" />}
+              </td>
+              <td className="px-4 py-2">
+                <button
+                  className="px-2 py-1 text-white bg-yellow-500 rounded hover:bg-yellow-700"
+                  onClick={() => handleItemEdit(item)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="px-2 py-1 text-white bg-red-500 rounded hover:bg-red-700"
+                  onClick={() => handleItemDelete(item.id)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
         <h2 className="mt-8 mb-4 text-2xl font-bold text-center">Blogs List</h2>
         <div className="mb-10 overflow-x-auto">
           <table className="w-full border table-auto">
@@ -696,6 +828,86 @@ const BeststoresForm = () => {
 </div>
 
       </div>
+
+
+      <Transition appear show={itemisOpen} as={React.Fragment}>
+        <Dialog as="div" open={itemisOpen} onClose={() => setItemIsOpen(false)} className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen p-4 text-center">
+            <Dialog.Panel className="max-w-lg p-6 mx-auto bg-white rounded shadow-lg">
+              <Dialog.Title as="h3" className="text-lg font-bold">Item Form</Dialog.Title>
+              <button className="absolute top-2 right-2" onClick={() => setItemIsOpen(false)}>
+                <XIcon className="w-6 h-6 text-gray-500" />
+              </button>
+              <form onSubmit={handleItemSubmit}>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">Name</label>
+                  <input
+                    type="text"
+                    value={itemname}
+                    onChange={(e) => setItemName(e.target.value)}
+                    className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">Discount</label>
+                  <input
+                    type="text"
+                    value={itemdiscount}
+                    onChange={(e) => setItemDiscount(e.target.value)}
+                    className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">Description</label>
+                  <input
+                    type="text"
+                    value={itemdescription}
+                    onChange={(e) => setItemDescription(e.target.value)}
+                    className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">Discount text</label>
+                  <input
+                    type="text"
+                    value={itemdiscounttext}
+                    onChange={(e) => setItemDiscountText(e.target.value)}
+                    className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">Image</label>
+                  <input
+                    type="file"
+                    onChange={(e) => setItemImage(e.target.files[0])}
+                    className="block w-full text-sm text-gray-500 border border-gray-300 rounded-md cursor-pointer focus:outline-none"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">Link</label>
+                  <input
+                    type="text"
+                    value={itemlink}
+                    onChange={(e) => setItemLink(e.target.value)}
+                    className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="px-4 py-2 font-bold text-white bg-green-500 rounded hover:bg-green-700 focus:outline-none focus:shadow-outline"
+                >
+                  {editId ? 'Update Item' : 'Add Item'}
+                </button>
+              </form>
+            </Dialog.Panel>
+          </div>
+        </Dialog>
+      </Transition>
 
       <Transition appear show={blogIsOpen} as={React.Fragment}>
         <Dialog as="div" open={blogIsOpen} onClose={() => setBlogIsOpen(false)} className="fixed inset-0 z-50 overflow-y-auto">

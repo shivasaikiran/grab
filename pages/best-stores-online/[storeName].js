@@ -69,7 +69,19 @@ const StoreDetail = () => {
   const toggleShowAllCoupons = () => {
     setShowAllCoupons(!showAllCoupons);
   };
+  useEffect(() => {
+    const fetchMobileItems = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'beststoreitem',));
+        const items = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        setMobileItems(items);
+      } catch (error) {
+        console.error('Error fetching mobile items: ', error);
+      }
+    };
 
+    fetchMobileItems();
+  }, []);
   if (!store) return <div>Loading...</div>;
 
   return (
@@ -144,18 +156,18 @@ const StoreDetail = () => {
                 <div className="flex flex-col items-center mr-4">
                   {item.imageUrl && (
                     <div className="border-[1px] w-[100px] h-[78px] rounded-md mb-2 py-5 px-2">
-                      <img src={item.imageUrl} alt={item.name} className="w-[75px] h-[36px] rounded-md" />
+                      <img src={item.imageUrl} alt={item.itemname} className="w-[75px] h-[36px] rounded-md" />
                     </div>
                   )}
-                  <div className="text-gray-500">{item.name}</div>
+                  <div className="text-gray-500">{item.itemname}</div>
                 </div>
                 <div className="flex flex-col justify-between flex-grow">
                   <div className='ml-2'>
                     <div className="text-xl font-bold lg:text-3xl">
-                      <span className='mr-2 text-red-500 discount-shake'>{item.discount}% OFF</span>
-                      <span>{item.discounttext}</span>
+                      <span className='mr-2 text-red-500 discount-shake'>{item.itemdiscount}% OFF</span>
+                      <span>{item.itemdiscounttext}</span>
                     </div>
-                    <p className="text-gray-600">{item.description}</p>
+                    <p className="text-gray-600">{item.itemdescription}</p>
                   </div>
                   <div className="flex items-center justify-end">
                     <button className="px-4 py-2 font-bold text-white bg-red-500 rounded-md">
@@ -176,18 +188,18 @@ const StoreDetail = () => {
                     <div className="flex flex-col items-center mr-4">
                       {item.imageUrl && (
                         <div className="border-[1px] w-[100px] h-[78px] rounded-md mb-2 py-5 px-2">
-                          <img src={item.imageUrl} alt={item.name} className="w-[75px] h-[36px] rounded-md" />
+                          <img src={item.imageUrl} alt={item.itemname} className="w-[75px] h-[36px] rounded-md" />
                         </div>
                       )}
-                      <div className="text-gray-500">{item.name}</div>
+                      <div className="text-gray-500">{item.itemname}</div>
                     </div>
                     <div className="flex flex-col justify-between flex-grow">
                       <div className='ml-2'>
                         <div className="text-xl font-bold lg:text-3xl">
-                          <span className='mr-2 text-red-500 discount-shake'>{item.discount}% OFF</span>
-                          <span>{item.discounttext}</span>
+                          <span className='mr-2 text-red-500 discount-shake'>{item.itemdiscount}% OFF</span>
+                          <span>{item.itemdiscounttext}</span>
                         </div>
-                        <p className="text-gray-600">{item.description}</p>
+                        <p className="text-gray-600">{item.itemdescription}</p>
                       </div>
                       <div className="flex items-center justify-end">
                         <button className="px-4 py-2 font-bold text-white bg-red-500 rounded-md">
@@ -200,12 +212,18 @@ const StoreDetail = () => {
               ))}
             </>
           )}
-          <button
-            onClick={toggleShowAllCoupons}
-            className="px-4 py-2 mt-4 font-bold text-white bg-green-500 rounded-md"
-          >
-            {showAllCoupons ? 'Show Less' : 'Show More'}
-          </button>
+         {mobileItems.length > 20 && (
+                <div className="flex justify-center mt-4">
+                  <button
+                    className="px-4 py-2 text-sm font-semibold text-gray-900 bg-green-500 rounded-md shadow-md hover:bg-gray-300"
+                    onClick={toggleShowAllCoupons}
+                  >
+                    {showAllCoupons ? 'Show Less' : 'Show More'}
+                  </button>
+                </div>
+                )}
+
+                
         </div>
       </div>
       <div class="  bg-white flex px-6">

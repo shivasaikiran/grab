@@ -98,7 +98,7 @@ function Babyandkids() {
   useEffect(() => {
     const fetchMobileItems = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, 'categories', 'beautyproducts', 'items'));
+        const querySnapshot = await getDocs(collection(db, 'categories', 'babyandkids', 'items'));
         const items = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         setMobileItems(items);
       } catch (error) {

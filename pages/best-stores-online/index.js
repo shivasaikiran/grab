@@ -9,6 +9,7 @@ import { ImCross } from "react-icons/im";
 
 const Popularstores = () => {
   const [stores, setStores] = useState([]);
+  
   const [visibleStores, setVisibleStores] = useState(20);
   const [banner, setBanner] = useState({ title: '', description: '', backgroundImage: '' });
   const [blogs, setBlogs] = useState([]);

@@ -10,6 +10,7 @@ import {  animateScroll as scroll } from 'react-scroll';
 import { useRouter } from 'next/router';
 
 
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);

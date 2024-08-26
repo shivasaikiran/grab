@@ -5,13 +5,26 @@ import { FaHome, FaTag, FaFilm, FaPlane, FaTimes, FaSearch } from 'react-icons/f
 import { GiCelebrationFire } from 'react-icons/gi';
 import Link from 'next/link';
 import { RiDiscountPercentFill } from 'react-icons/ri';
+import { useRouter } from 'next/router';
 
-const Blogheader = () => {
+const Blogheader = ({ searchTerm, setSearchTerm }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const menuRef = useRef(null);
+  const router = useRouter();
 
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Trigger search or navigation as needed
+    router.push(`/blog?search=${searchTerm}`);
+  };
+
+  
   const toggleMenu = () => {
     setIsMenuOpen(prev => !prev);
   };
@@ -34,9 +47,7 @@ const Blogheader = () => {
     setIsSearchOpen(!isSearchOpen);
   };
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
+ 
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -82,13 +93,16 @@ const Blogheader = () => {
 ) : (
   <div className="fixed top-0 left-0 right-0 z-50 w-full bg-white shadow-lg">
     <div className="relative flex items-center w-full h-20 px-4 lg:px-8">
-      <input
-        type="text"
-        value={searchTerm}
-        onChange={handleSearchChange}
-        placeholder="Search..."
-        className="w-full px-3 py-2 text-lg border-none outline-none"
-      />
+    <form onSubmit={handleSubmit}>
+    <input
+  type="text"
+  value={searchTerm}
+            onChange={handleSearch}
+  placeholder="Search..."
+  className="w-full px-3 py-2 text-lg border-none outline-none"
+/>
+
+    </form>
       <button onClick={toggleSearch} className="absolute text-gray-500 transform -translate-y-1/2 top-1/2 right-4">
         <FaTimes className="text-xl" />
       </button>

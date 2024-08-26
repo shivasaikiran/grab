@@ -417,7 +417,7 @@ const [showMore, setShowMore] = useState(false);
       {blogs.map(blog => (
         <div key={blog.id} className="pb-4 mb-4 border-b">
           {/* <h3 className="mb-2 text-xl font-semibold">Blog Title</h3> */}
-          <div className="text-gray-700" dangerouslySetInnerHTML={{ __html: blog.content }} />
+          <div className="text-justify text-gray-700" dangerouslySetInnerHTML={{ __html: blog.content }} />
         </div>
       ))}
     </div>
