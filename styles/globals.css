@@ -1,0 +1,265 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* styles/globals.css */
+
+/* styles/globals.css */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+.slick-next::before{
+    color:#26c943 !important;
+}
+.slick-prev::before{
+    color:#26c943 !important;
+}
+/* Add this to your global CSS file or in a specific stylesheet */
+
+
+
+/* Media query to hide the div on mobile */
+@media (max-width: 768px) {
+  .hide-on-mobile {
+    display: none !important;
+  }
+}
+
+
+
+/* Hide scrollbar */
+/* Hide scrollbar */
+.tabs-slider .slick-list {
+    overflow: hidden;
+  }
+  
+  .tabs-slider .slick-track {
+    display: flex;
+    align-items: center;
+  }
+  
+  .tabs-slider .slick-slide {
+    display: inline-block;
+  }
+  
+  /* Hide scrollbar */
+  .tabs-slider::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .tabs-slider {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  /* animations.css */
+
+/* Add these styles to your CSS file or use Tailwind @apply directive */
+/* styles/globals.css or your stylesheet */
+.flip-container {
+  perspective: 1000px;
+}
+
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.flip-icon {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flip-container:hover .flip-icon {
+  transform: rotateY(180deg);
+}
+
+.flip-front,
+.flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flip-front {
+  background-color: #22c55e; /* Tailwind green-500 color */
+  color: white;
+}
+@keyframes spin-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 4s linear infinite;
+}
+
+.flip-back {
+  background-color: #22c55e; /* Tailwind green-500 color */
+  color: white;
+  transform: rotateY(180deg);
+}
+
+.flip-text {
+  font-size: 1.25rem; /* Tailwind text-lg */
+  color: white;
+}
+
+
+@keyframes rotateVertical {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+.rotate-vertical {
+  position: relative;
+  height: 500px; /* Adjust based on your content */
+  overflow: hidden;
+
+}
+
+.rotate-vertical ul {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  animation: rotateVertical 20s linear infinite;
+}
+
+.rotate-vertical li {
+  height: 60px; /* Adjust the height of each item */
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #c0c0c0; /* Adjust border style as needed */
+}
+
+.rotate-vertical img {
+  object-fit: cover;
+  width: 60px;
+  height: 60px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+.rotate-vertical span { /* Adjust text color as needed */
+  text-decoration: none;
+}
+.discount-shake {
+  display: inline-block;
+  animation: shake 4s infinite;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+/* styles/globals.css */
+
+/* styles/globals.css */
+
+/* Keyframes for title shake animation */
+@keyframes title-shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+/* Button styles */
+.btn-join-now {
+  @apply w-24 lg:h-10 h-8 lg:p-2 lg:text-xs p-2 text-[10px] font-bold text-white transition-transform duration-300 rounded-full bg-gradient-to-r from-red-400 to-red-600;
+  transform: rotateX(5deg) rotateY(5deg) scale(1.05);
+  animation: title-shake 0.5s infinite;
+}
+
+
+
+
+/* Icon styles */
+.icon-instagram {
+  background: linear-gradient(45deg, #f5a623, #f56c6c, #b56cf5); /* Instagram color */
+  color: white;
+  border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition-transform: transform 0.3s ease;
+  transform: rotateX(10deg) rotateY(10deg); /* Apply default tilt */
+}
+
+/* WhatsApp icon color */
+.icon-whatsapp {
+  color: #25D366; /* WhatsApp color */
+  transition-transform: transform 0.3s ease;
+  transform: rotateX(10deg) rotateY(10deg); /* Apply default tilt */
+}
+/* socialIcons.css */
+@media (max-width: 640px) {
+  .mobile-size {
+    width: 32px; /* Adjust size for mobile view */
+    height: 32px;
+  }
+}
+/* Add this to your global CSS file */
+body.no-scroll {
+  overflow: hidden;
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+@keyframes scale-up {
+  0% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-scale-up {
+  animation: scale-up 0.3s ease-out;
+}
+
