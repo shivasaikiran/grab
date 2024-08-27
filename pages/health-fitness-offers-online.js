@@ -27,7 +27,7 @@ function Healthandfitness() {
     //   label: 'Coupons (8)',
     // }offers
     // {
-    //   id: 'deals',
+    //   id: 'offers',
     //   label: 'Deals (208)',
     // },
   ];
@@ -168,35 +168,35 @@ function Healthandfitness() {
         <div className="mb-4">
             <h3 className="text-lg font-bold text-green-500"> Categories</h3>
             <div>
-          <Link href='/mobile-deals-online'> <p className="ml-2">Mobile </p></Link>
+          <Link href='/mobile-offers-online'> <p className="ml-2">Mobile </p></Link>
             </div>
             <div>
               
-            <Link href='/fashion-deals-online'> <p className="ml-2">Fashion </p></Link>
+            <Link href='/fashion-offers-online'> <p className="ml-2">Fashion </p></Link>
             </div>
             <div>
               
-            <Link href='/footwear-deals-online'> <p className="ml-2">Footwear </p></Link>
+            <Link href='/footwear-offers-online'> <p className="ml-2">Footwear </p></Link>
             </div>
             <div>
              
-            <Link href='/electronics-deals-online'> <p className="ml-2">Electronics </p></Link>
+            <Link href='/electronics-offers-online'> <p className="ml-2">Electronics </p></Link>
             </div>
             <div>
               
-            <Link href='/beauty-deals-online'> <p className="ml-2">Beauty </p></Link>
+            <Link href='/beauty-offers-online'> <p className="ml-2">Beauty </p></Link>
             </div>
             <div>
               
-            <Link href='/baby-kids-deals-online'> <p className="ml-2">Baby & Kids </p></Link>
+            <Link href='/baby-kids-offers-online'> <p className="ml-2">Baby & Kids </p></Link>
             </div>
             <div>
              
-            <Link href='/health-fitness-deals-online'> <p className="ml-2">Health & Fitness </p></Link>
+            <Link href='/health-fitness-offers-online'> <p className="ml-2">Health & Fitness </p></Link>
             </div>
             <div>
              
-            <Link href='/home-kitchen-deals-online'> <p className="ml-2">Home & Kitchen</p></Link>
+            <Link href='/home-kitchen-offers-online'> <p className="ml-2">Home & Kitchen</p></Link>
             </div>
           </div>
          
@@ -326,37 +326,37 @@ function Healthandfitness() {
 
       <div className="grid justify-center grid-cols-3 gap-2 px-6 mt-8 mb-10 lg:gap-4 sm:grid-cols-7">
        
-      <Link href='/electronics-deals-online'><div className="flex justify-center">
+      <Link href='/electronics-offers-online'><div className="flex justify-center">
           <div className="flex items-center justify-center p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
           <p className='text-xs font-bold lg:text-base hover:text-green-500'>Electronics</p>
           </div>
         </div></Link>
-        <Link href='/fashion-deals-online'><div className="flex justify-center">
+        <Link href='/fashion-offers-online'><div className="flex justify-center">
           <div className="flex items-center justify-center p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
           <p className='text-xs font-bold lg:text-base hover:text-green-500'>Fashion</p>
           </div>
         </div></Link>
-        <Link href='/footwear-deals-online'><div className="flex justify-center">
+        <Link href='/footwear-offers-online'><div className="flex justify-center">
           <div className="flex items-center justify-center p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
           <p className='text-xs font-bold lg:text-base hover:text-green-500'>Footwear</p>
           </div>
         </div></Link>
-        <Link href='/beauty-deals-online'><div className="flex justify-center">
+        <Link href='/beauty-offers-online'><div className="flex justify-center">
           <div className="flex items-center justify-center p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
           <p className='text-xs font-bold lg:text-base hover:text-green-500'>Beauty</p>
           </div>
         </div></Link>
-        <Link href='/baby-kids-deals-online'><div className="flex justify-center">
+        <Link href='/baby-kids-offers-online'><div className="flex justify-center">
           <div className="flex items-center justify-center lg:p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
           <p className='text-xs font-bold lg:text-base hover:text-green-500'>Baby & Kids</p>
           </div>
         </div></Link>
-        <Link href='/mobile-deals-online'><div className="flex justify-center">
+        <Link href='/mobile-offers-online'><div className="flex justify-center">
           <div className="flex items-center justify-center p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
           <p className='text-xs font-bold lg:text-base hover:text-green-500'>Mobile</p>
           </div>
         </div></Link>
-        <Link href='/home-kitchen-deals-online'><div className="flex justify-center">
+        <Link href='/home-kitchen-offers-online'><div className="flex justify-center">
           <div className="flex items-center justify-center lg:p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
           <p className='text-xs font-bold lg:text-base hover:text-green-500'>Home & Kitchen</p>
           </div>

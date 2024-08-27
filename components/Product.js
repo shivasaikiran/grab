@@ -110,10 +110,10 @@ const Product = () => {
           </h2>
         </div> */}
 
-        <Slider {...settings} className="mt-2 ">
+        <Slider {...settings} className="mt-2 " >
           {products.map((product) => (
              
-            <div key={product.id} className="px-2 mb-3">
+            <div key={product.id} className="px-2 mb-3" >
                <a href={product.link} target="_blank" rel="noopener noreferrer">
               <div className="relative flex flex-col justify-between lg:h-64 h-[200px] border bg-white rounded-sm shadow-md group hover:shadow-green-300 hover:border-green-500">
                 <div className="overflow-hidden aspect-w-1 h-[200px]">

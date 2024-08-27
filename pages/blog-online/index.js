@@ -105,7 +105,7 @@ const Blog = () => {
       <Blogheader searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <div className="container p-4 mx-auto mt-20">
         <div className="flex flex-wrap">
-          <div className="w-full px-4 md:w-9/12">
+          <div className="w-full lg:px-4 md:w-9/12">
             <h1 className="mb-8 text-2xl font-bold">Latest Posts</h1>
             {filteredBlogPosts.length > 0 ? (
               filteredBlogPosts.map(post => (
@@ -115,28 +115,41 @@ const Blog = () => {
                       <img
                         src={post.imageUrl}
                         alt={post.title}
-                        className="w-40 h-40 p-6 lg:p-4 lg:w-64 lg:h-40"
+                        className="w-40 h-[100px] p-6 lg:p-4 lg:w-64 lg:h-40"
                       />
-                      <div className="w-2/3 p-4">
-                        <h3 className="hidden mb-2 text-xl font-semibold sm:block">{post.title}</h3>
-                        <h3 className="mb-2 text-xl font-semibold lg:hidden truncate-content">
-                          {truncateContent(post.title, 3)}
+                      <div className="w-2/3 p-2 lg:p-4">
+                        <h3 className="hidden mb-2 text-xl font-semibold sm:block">{truncateContent(post.title, 9)}</h3>
+                        <h3 className=" text-[130%] font-semibold lg:hidden truncate-content">
+                          {truncateContent(post.title, 9)}
                         </h3>
                         <p className="hidden mb-4 text-gray-700 sm:block">
-                          <div dangerouslySetInnerHTML={{ __html: truncateContent(post.content, 12) }} />
+                          <div dangerouslySetInnerHTML={{ __html: truncateContent(post.content, 30) }} />
                         </p>
-                        <p className="mb-4 text-gray-700 lg:hidden">{truncateContent(post.content, 5)}</p>
-                        <div className="flex items-center mb-2 text-sm text-gray-600">
+                       
+                        <div className="flex items-center hidden mb-2 text-sm text-gray-600 sm:block">
                           <FaRegCalendarAlt className="mr-2" />
                           <span>{new Date(post.date.seconds * 1000).toLocaleDateString()}</span>
                         </div>
-                        <Link href={`/blog-online/${post.id}`} className="text-blue-500 hover:underline">
+                        <Link href={`/blog-online/${post.id}`} className="hidden text-blue-500 hover:underline sm:block">
                           Read More &rarr;
                         </Link>
                       </div>
+                      
                     </div>
                   </Link>
+                  <p className="mb-4 px-4 text-gray-700 lg:hidden text-[80%]">{truncateContent(post.content, 30)}</p>
+                 <div className='flex flex-row justify-between px-4 mb-2'>
+                   <div className="flex items-center mb-2 text-sm text-gray-600 lg:hidden">
+                          <FaRegCalendarAlt className="mr-2" />
+                          <span>{new Date(post.date.seconds * 1000).toLocaleDateString()}</span>
+                        </div>
+                        <Link href={`/blog-online/${post.id}`} className="text-blue-500 hover:underline lg:hidden">
+                          Read More &rarr;
+                        </Link>
+                 </div>
                 </div>
+
+                
               ))
             ) : (
               <p>No posts found for this category.</p>
@@ -170,8 +183,7 @@ const Blog = () => {
             </ul>
            <div className='mt-[420px]' >
            
-          <div className="flex justify-center
-          ">
+          <div className="flex justify-center ">
             <div className="flex flex-row space-x-2 p-2 border-red-500  lg:space-x-2 border bg-white w-[270px] justify-center rounded-md">
             <button className="flex items-center btn-join-now">
   Join Now

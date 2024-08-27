@@ -126,8 +126,8 @@ function Beauty() {
 </div>
         <div className="p-1   relative mb-1 bg-green-500 lg:mb-0 lg:mr-2 w-full lg:w-[30%] h-[90px] lg:h-[130px] flex lg:flex-col flex-row space-x-4 lg:space-y-2">
           <span className="relative inline-block mb-1 mr-2 lg:mb-2 lg:top-0 top-7 ">
-            <h1 className="font-bold text-white text-start lg:text-center lg:text-4xl">Beauty offers </h1>
-            <span className="absolute hidden sm:block bottom-[-4px] left-24 lg:left-20 lg:w-[230px] w-[160px] h-[2px] bg-white"></span>
+            <h1 className="font-bold text-white text-start lg:text-center lg:text-4xl">Beauty  </h1>
+            <span className="absolute hidden sm:block bottom-[-4px] left-24 lg:left-32 lg:w-[130px] w-[160px] h-[2px] bg-white"></span>
           </span>
           <div className="flex justify-center">
             <div className="flex flex-row space-x-2 p-1 relative lg:top-0 top-5 border-red-500 lg:h-12 h-10 lg:space-x-6 border bg-white lg:w-[300px] w-[250px] justify-center rounded-md">
