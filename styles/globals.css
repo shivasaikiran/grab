@@ -34,7 +34,7 @@ html, body {
 @media (max-width: 768px) {
   .hide-on-mobile {
     position: relative;
-    left: 92% !important;
+    right: 0px !important;
   }
   .hide-on-mobile1{
     position: relative;
