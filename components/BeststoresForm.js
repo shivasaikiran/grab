@@ -29,7 +29,7 @@ const BeststoresForm = () => {
 
   const [title, setTitle] = useState('');
   const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+  const [bannerimg, setBannerimg] = useState(null);
   const [discount, setDiscount] = useState('');
   const [image, setImage] = useState(null);
  
@@ -392,23 +392,32 @@ const BeststoresForm = () => {
         // Get image URL
         imageUrl = await getDownloadURL(storageRef);
       }
+      let bannerimgUrl = '';
+      if (bannerimg) {
+        // Upload image to Firebase Storage
+        const storage = getStorage();
+        const storageRef = ref(storage, `images/${bannerimg.name}`);
+        await uploadBytes(storageRef, bannerimg);
+        // Get image URL
+        bannerimgUrl = await getDownloadURL(storageRef);
+      }
 
       if (editId) {
         // Update existing store
         const storeDocRef = doc(db, 'beststores', editId);
-        await updateDoc(storeDocRef, { title, discount, imageUrl,link,name,description,category});
+        await updateDoc(storeDocRef, { title, discount, imageUrl,link,name,bannerimgUrl,category});
         toast.success('Store updated successfully!');
       } else {
         // Add new store
         const storesCollectionRef = collection(db, 'beststores');
-        await addDoc(storesCollectionRef, { title, discount, imageUrl,link,name,description,category });
+        await addDoc(storesCollectionRef, { title, discount, imageUrl,link,name,bannerimgUrl,category });
         toast.success('Store added successfully!');
       }
 
       // Clear form
       setTitle('');
       setName('');
-      setDescription('');
+      setBannerimg(null);
       setDiscount('');
       setCategory('');
       setImage(null);
@@ -425,7 +434,7 @@ const BeststoresForm = () => {
   const handleEdit = (store) => {
     setTitle(store.title);
     setName(store.name);
-    setDescription(store.description);
+    setBannerimg(store.bannerimgUrl);
     setDiscount(store.discount);
     setCategory(store.category);
     setLink(store.link);
@@ -634,7 +643,8 @@ const BeststoresForm = () => {
                 <th className="px-4 py-2">No of offers</th>
                 <th className="px-4 py-2">No of coupons</th>
                 <th className="px-4 py-2">Image</th>
-                <th className="px-4 py-2">Banner Name</th>
+                <th className="px-4 py-2"> Name</th>
+                <th className="px-4 py-2">Banner Image</th>
                 <th className="px-4 py-2">Category</th>
                 <th className="px-4 py-2">Actions</th>
               </tr>
@@ -646,10 +656,15 @@ const BeststoresForm = () => {
                   <td className="px-4 py-2 font-bold border-b">{store.discount}</td>
                   <td className="px-4 py-2 border-b">
                     {store.imageUrl && (
-                      <img src={store.imageUrl} alt={store.title} className="w-auto h-10 " />
+                      <img src={store.imageUrl} alt={store.name} className="w-auto h-10 " />
                     )}
                   </td>
                   <td className="px-4 py-2 font-bold border-b">{store.name}</td>
+                  <td className="px-4 py-2 border-b">
+                    {store.bannerimgUrl && (
+                      <img src={store.bannerimgUrl} alt={store.name} className="w-auto h-10 " />
+                    )}
+                  </td>
                   <td className="px-4 py-2 font-bold border-b">{store.category}</td>
                   <td className="px-4 py-2 border-b">
                     <button
@@ -789,7 +804,7 @@ const BeststoresForm = () => {
         <th className="px-4 py-2">Title</th>
         <th className="px-4 py-2">Offers</th>
         <th className="px-4 py-2">Coupons</th>
-        <th className="px-4 py-2">Description</th>
+        <th className="px-4 py-2">bannerImage</th>
         <th className="px-4 py-2">Actions</th>
       </tr>
     </thead>
@@ -806,7 +821,13 @@ const BeststoresForm = () => {
           <td className="px-4 py-2">{store.title}</td>
           <td className="px-4 py-2">{store.offers}</td>
           <td className="px-4 py-2">{store.coupons}</td>
-          <td className="px-4 py-2">{store.description}</td>
+          <td >
+          <img
+              src={store.bannerimgUrl}
+              alt="Store"
+              className="object-cover w-16 h-16"
+            />
+          </td>
           <td className="px-4 py-2">
             <button
               className="px-2 py-1 text-white bg-yellow-500 rounded hover:bg-yellow-700"
@@ -1128,13 +1149,11 @@ const BeststoresForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Banner Description</label>
+            <label className="block text-sm font-medium text-gray-700">Banner Image</label>
             <input
-              type="text"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-              required
+              type="file"
+              onChange={(e) => setBannerimg(e.target.files[0])}
+              className="block w-full text-sm text-gray-500 border border-gray-300 rounded-md cursor-pointer focus:outline-none focus:ring-green-500 focus:border-green-500"
             />
           </div>
           <div className="mb-4">

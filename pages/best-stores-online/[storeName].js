@@ -90,8 +90,8 @@ const StoreDetail = () => {
       <div className="relative flex flex-col items-center justify-center w-full h-auto lg:flex-row lg:h-[11rem]">
         <div className="p-1 relative mb-4 bg-green-500 lg:mb-0 lg:mr-2 w-full lg:w-[30%] h-auto lg:h-[130px] flex flex-col space-y-2">
           <span className="relative inline-block mb-2 mr-2">
-            <h1 className="text-2xl font-bold text-center text-white lg:text-4xl">Popular Stores</h1>
-            <span className="absolute bottom-[-4px] left-24 lg:left-20 lg:w-[240px] w-[160px] h-[2px] bg-white"></span>
+            <h1 className="text-2xl font-bold text-center text-white lg:text-4xl">Best Stores</h1>
+            <span className="absolute bottom-[-4px] left-24 lg:left-24 lg:w-[200px] w-[160px] h-[2px] bg-white"></span>
           </span>
           <div className="flex justify-center">
             <div className="flex flex-row space-x-2 p-2 border-red-500 mt- lg:space-x-6 border bg-white w-[300px] justify-center rounded-md">
@@ -105,12 +105,18 @@ const StoreDetail = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col w-full p-6 text-center bg-green-500 lg:w-2/3 lg:p-8 h-[7rem] lg:h-[130px] lg:ml-2 lg:mt-0">
-          <div key={store.id} className="relative">
-            <h1 className="text-xl font-bold text-white lg:text-4xl">{store.name}</h1>
-            <p className="text-base text-white lg:text-lg">{store.description}</p>
-          </div>
+        <div className="flex flex-col w-full   text-center  lg:w-2/3  h-[90px] lg:h-[130px] lg:ml-2 lg:mt-0">
+        
+        <div key={store.id} className="relative w-full h-full overflow-hidden">
+          <img 
+            src={store.bannerimgUrl} 
+            alt={`Banner ${store
+              .id}`}
+            className="object-cover w-full h-full"
+          />
         </div>
+    
+            </div>
       </div>
 
       {/* Banners Section */}
@@ -168,7 +174,7 @@ const StoreDetail = () => {
                       <span>{item.itemdiscounttext}</span>
                     </div>
                     <p className="text-gray-600">{item.itemdescription}</p>
-                  </div>
+                  </div> ,
                   <div className="flex items-center justify-end">
                     <button className="px-4 py-2 font-bold text-white bg-red-500 rounded-md">
                       Grab Deal

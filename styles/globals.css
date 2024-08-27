@@ -33,7 +33,12 @@ html, body {
 /* Media query to hide the div on mobile */
 @media (max-width: 768px) {
   .hide-on-mobile {
-    display: none !important;
+    position: relative;
+    left: 92% !important;
+  }
+  .hide-on-mobile1{
+    position: relative;
+   left: 0px !important;
   }
 }
 

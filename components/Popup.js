@@ -2,9 +2,160 @@ import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { auth, db } from '@/Firebase/Config';
+import { GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, fetchSignInMethodsForEmail, linkWithCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { useRouter } from 'next/router';
+import { doc, setDoc } from 'firebase/firestore';
+import 'tailwindcss/tailwind.css';
+import { FaFacebookF } from 'react-icons/fa';
+import { FcGoogle } from 'react-icons/fc';
+import { HiEye, HiEyeOff } from 'react-icons/hi';
+
+
+const validatePassword = (password) => {
+  const lengthValid = password.length >= 8;
+  const uppercaseValid = /[A-Z]/.test(password);
+  const numberValid = /[0-9]/.test(password);
+  const specialCharValid = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  
+  return lengthValid && uppercaseValid && numberValid && specialCharValid;
+};
+
+const getPasswordStrength = (password) => {
+  const length = password.length;
+  if (length === 0) return 'None';
+  if (length < 8) return 'Weak';
+  if (validatePassword(password)) return 'Strong';
+  return 'Medium';
+};
 
 const Popup = ({ onClose }) => {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const [error, setError] = useState(null);
+  const [isSignup, setIsSignup] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState(''); // Add state for name
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const router = useRouter();
+
+  const handleGoogleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      await setDoc(doc(db, 'users', user.uid), {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        lastLogin: new Date(),
+      });
+      router.push('/');
+    } catch (err) {
+      if (err.code === 'auth/account-exists-with-different-credential') {
+        const email = err.customData.email;
+        const pendingCred = GoogleAuthProvider.credentialFromError(err);
+        const methods = await fetchSignInMethodsForEmail(auth, email);
+
+        if (methods.length > 0) {
+          const provider = getProviderForProviderId(methods[0]);
+          const result = await signInWithPopup(auth, provider);
+          await linkWithCredential(result.user, pendingCred);
+          router.push('/');
+        }
+      } else {
+        setError(err.message);
+      }
+    }
+  };
+
+  const handleFacebookLogin = async () => {
+    const provider = new FacebookAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      await setDoc(doc(db, 'users', user.uid), {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        lastLogin: new Date(),
+      });
+      router.push('/');
+    } catch (err) {
+      if (err.code === 'auth/account-exists-with-different-credential') {
+        const email = err.customData.email;
+        const pendingCred = FacebookAuthProvider.credentialFromError(err);
+        const methods = await fetchSignInMethodsForEmail(auth, email);
+
+        if (methods.length > 0) {
+          const provider = getProviderForProviderId(methods[0]);
+          const result = await signInWithPopup(auth, provider);
+          await linkWithCredential(result.user, pendingCred);
+          router.push('/');
+        }
+      } else {
+        setError(err.message);
+      }
+    }
+  };
+
+  const getProviderForProviderId = (providerId) => {
+    switch (providerId) {
+      case GoogleAuthProvider.PROVIDER_ID:
+        return new GoogleAuthProvider();
+      case FacebookAuthProvider.PROVIDER_ID:
+        return new FacebookAuthProvider();
+      default:
+        throw new Error(`No provider implemented for ${providerId}`);
+    }
+  };
+
+  const handleEmailSignup = async (event) => {
+    event.preventDefault();
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    if (!validatePassword(password)) {
+      setError('Password must be at least 8 characters long, with an uppercase letter, number, and special character');
+      return;
+    }
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      await setDoc(doc(db, 'users', user.uid), {
+        uid: user.uid,
+        email: user.email,
+        displayName: name, // Save the name
+        lastLogin: new Date(),
+      });
+      router.push('/login');
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleEmailLogin = async (event) => {
+    event.preventDefault();
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      const user = auth.currentUser;
+      if (user) {
+        await setDoc(doc(db, 'users', user.uid), {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          lastLogin: new Date(),
+        });
+        router.push('/');
+      }
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -81,23 +232,24 @@ const Popup = ({ onClose }) => {
             Already Signed up? <Link href="/login"><span className="text-blue-500">Go to Login</span></Link>
           </p>
 
-          <Link href="/login">
+          
             <motion.button
+             onClick={handleFacebookLogin}
               className="w-full px-4 py-2 mb-2 text-white bg-blue-600 rounded hover:bg-blue-700"
               whileHover={{ scale: 1.05 }}
             >
               Continue with Facebook
             </motion.button>
-          </Link>
-
-          <Link href="/login">
+         
+       
             <motion.button
+             onClick={handleGoogleLogin}
               className="w-full px-4 py-2 mb-2 text-white bg-red-500 rounded hover:bg-red-600"
               whileHover={{ scale: 1.05 }}
             >
               Continue with Google
             </motion.button>
-          </Link>
+          
 
           <div className="flex items-center justify-center mt-4">
             <div className="h-[1px] w-1/3 bg-gray-400"></div>
@@ -107,7 +259,7 @@ const Popup = ({ onClose }) => {
 
           <Link href="/login">
             <motion.button
-              className="w-full px-4 py-2 mt-4 text-white bg-gray-500 rounded hover:bg-gray-600"
+              className="w-full px-4 py-2 mt-4 text-white bg-green-500 rounded hover:bg-gray-600"
               whileHover={{ scale: 1.05 }}
             >
               Continue with Email/Password

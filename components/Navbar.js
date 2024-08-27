@@ -156,17 +156,17 @@ const Navbar = () => {
       <div className="w-0 h-0 mx-auto border-b-8 border-x-8 border-x-transparent border-b-green-500"></div>
       {/* Dropdown content */}
       <div className="py-2 bg-green-100 rounded-lg shadow-lg w-[24vh] sm:w-[25vh] md:w-[25vh] lg:w-[25vh]">
-        <div className="grid grid-cols-1 gap-2 px-4 py-3 text-left">
-          <a href="/flipkart-deals-online" onClick={handleDropdownItemClick} className="flex items-center p-2 transition-colors duration-200 ease-in-out rounded hover:bg-green-100 whitespace-nowrap">
+        <div className="grid grid-cols-1 gap-2 px-6 py-3 text-center">
+          <a href="/flipkart-deals-online" onClick={handleDropdownItemClick} className="flex items-center transition-colors duration-200 ease-in-out rounded hover:bg-green-100 whitespace-nowrap">
             <h3 className="font-bold text-black hover:text-green-500">FlipKart deals</h3>
           </a>
-          <a href="/amazon-deals-online" onClick={handleDropdownItemClick} className="flex items-center p-2 transition-colors duration-200 ease-in-out rounded hover:bg-green-100 whitespace-nowrap">
+          <a href="/amazon-deals-online" onClick={handleDropdownItemClick} className="flex items-center transition-colors duration-200 ease-in-out rounded hover:bg-green-100 whitespace-nowrap">
             <h3 className="font-bold text-black hover:text-green-500">Amazon deals</h3>
           </a>
-          <a href="/myntra-deals-online" onClick={handleDropdownItemClick} className="flex items-center p-2 transition-colors duration-200 ease-in-out rounded hover:bg-green-100 whitespace-nowrap">
+          <a href="/myntra-deals-online" onClick={handleDropdownItemClick} className="flex items-center transition-colors duration-200 ease-in-out rounded hover:bg-green-100 whitespace-nowrap">
             <h3 className="font-bold text-black hover:text-green-500">Myntra deals</h3>
           </a>
-          <a href="/meesho-deals-online" onClick={handleDropdownItemClick} className="flex items-center p-2 transition-colors duration-200 ease-in-out rounded hover:bg-green-100 whitespace-nowrap">
+          <a href="/meesho-deals-online" onClick={handleDropdownItemClick} className="flex items-center transition-colors duration-200 ease-in-out rounded hover:bg-green-100 whitespace-nowrap">
             <h3 className="font-bold text-black hover:text-green-500">Meesho deals</h3>
           </a>
         </div>
@@ -187,7 +187,7 @@ const Navbar = () => {
             {isCategoryDropdownOpen && (
               <div className="absolute z-50 mt-1 transform -translate-x-1/2 rounded-lg shadow-lg left-1/2">
                   <div className="w-0 h-0 mx-auto border-b-8 border-x-8 border-x-transparent border-b-green-500"></div>
-                <div className="grid grid-cols-1 gap-2 px-8 py-4 w-[35vh] bg-green-100 text-center">
+                <div className="grid grid-cols-1 gap-2 px-8 py-4 w-[35vh] bg-green-100 text-center rounded-lg shadow-lg">
                   <a href='/mobile-offers-online' onClick={handleDropdownItemClick}><h3 className="font-bold text-black hover:text-green-500">Mobile</h3></a>
                   <a href='/electronics-offers-online' onClick={handleDropdownItemClick}><h3 className="font-bold text-black hover:text-green-500">Electronics</h3></a>
                   <a href='/fashion-offers-online' onClick={handleDropdownItemClick}><h3 className="font-bold text-black hover:text-green-500">Fashion</h3></a>

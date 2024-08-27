@@ -42,7 +42,7 @@ const CouponSection = () => {
     const { className, style, onClick } = props;
     return (
       <div
-        className={`${className} custom-arrow prev-arrow`}
+        className={`${className} custom-arrow prev-arrow hide-on-mobile1`}
         style={{
           ...style,
           display: 'flex',
@@ -263,7 +263,7 @@ const CouponSection = () => {
 </div>
 
 
-          <Slider {...sliderSettings} className="mx-auto mt-8">
+          <Slider {...sliderSettings} className="mx-auto mt-8 ">
             {displayedCoupons.map((coupon) => (
               <CouponCard key={coupon.id} coupon={coupon} categoryPath={getCategoryPath(activeCategory)} />
             ))}

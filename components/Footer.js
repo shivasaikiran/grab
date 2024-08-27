@@ -56,7 +56,7 @@ const Footer = () => {
     <li className="mb-2"><a href="/meesho-deals-online" className="hover:underline">Meesho</a></li>
   </ul>
   <div className="mt-4">
-    <a href="/Best-stores-online" className="text-white hover:underline">
+    <a href="/best-stores-online" className="text-white hover:underline">
      <button  className='p-2 bg-green-500 rounded-md'> Show More</button>
     </a>
   </div>
