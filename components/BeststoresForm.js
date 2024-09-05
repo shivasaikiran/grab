@@ -55,6 +55,73 @@ const BeststoresForm = () => {
   const [bannerEditId, setBannerEditId] = useState(null);
   const [isBannerOpen, setIsBannerOpen] = useState(false);
 
+  // States
+  const [similarStoreName, setSimilarStoreName] = useState('');
+  const [similarStores, setSimilarStores] = useState([]);
+  const [similarEditId, setSimilarEditId] = useState(null);
+  const [isSimilarOpen, setIsSimilarOpen] = useState(false);
+
+  // Fetch stores from Firestore on component mount
+  useEffect(() => {
+    const fetchStores = async () => {
+      const storesSnapshot = await getDocs(collection(db, 'similarStores'));
+      const storesData = storesSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setSimilarStores(storesData);
+    };
+
+    fetchStores();
+  }, []);
+
+  // Handlers
+  const handleSaveSimilarStore = async () => {
+    try {
+      if (similarEditId !== null) {
+        // Update store in Firestore
+        const storeRef = doc(db, 'similarStores', similarEditId);
+        await updateDoc(storeRef, { name: similarStoreName });
+        setSimilarStores(
+          similarStores.map(store =>
+            store.id === similarEditId ? { id: store.id, name: similarStoreName } : store
+          )
+        );
+        
+        setSimilarEditId(null);
+      } else {
+        // Add new store to Firestore
+        const docRef = await addDoc(collection(db, 'similarStores'), {
+          name: similarStoreName,
+        });
+        setSimilarStores([
+          ...similarStores,
+          { id: docRef.id, name: similarStoreName },
+        ]);
+      }
+      setSimilarStoreName('');
+      setIsSimilarOpen(false);
+    } catch (error) {
+      console.error('Error saving store: ', error);
+    }
+  };
+
+  const handleEditSimilarStore = id => {
+    const store = similarStores.find(store => store.id === id);
+    setSimilarStoreName(store.name);
+    setSimilarEditId(id);
+    setIsSimilarOpen(true);
+  };
+
+  const handleDeleteSimilarStore = async id => {
+    try {
+      await deleteDoc(doc(db, 'similarStores', id));
+      setSimilarStores(similarStores.filter(store => store.id !== id));
+    } catch (error) {
+      console.error('Error deleting store: ', error);
+    }
+  };
+
   // Filtering states
   const [minOffers, setMinOffers] = useState('');
   const [maxOffers, setMaxOffers] = useState('');
@@ -550,7 +617,12 @@ const BeststoresForm = () => {
         >
           Add ads
         </button>
-
+        <button
+          className="px-4 py-2 mb-4 mr-4 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+          onClick={() => setIsSimilarOpen(true)}
+        >
+          Add similarStores
+        </button>
         <h2 className="mt-8 mb-4 text-2xl font-bold text-center">Banners List</h2>
 
 <div className="overflow-x-auto">
@@ -580,6 +652,42 @@ const BeststoresForm = () => {
             </button>
             <button
               onClick={() => handleBannerDelete(banner.id)}
+              className="px-4 py-2 font-bold text-white bg-red-500 rounded hover:bg-red-700 focus:outline-none focus:shadow-outline"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+<h2 className="mt-8 mb-4 text-2xl font-bold text-center">similarStores</h2>
+<div className="overflow-x-auto">
+  <table className="w-full border table-auto">
+    <thead>
+      <tr className='border-b'>
+       
+        <th className="px-4 py-2">store</th>
+        <th className="px-4 py-2">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {similarStores.map((store) => (
+        <tr key={store.id}>
+          
+          <td className="px-4 py-2 border-b">
+            {store.name}
+          </td>
+          <td className="px-4 py-2 border-b">
+            <button
+              onClick={() => handleEditSimilarStore(store)}
+              className="px-4 py-2 mr-2 font-bold text-white bg-yellow-500 rounded hover:bg-yellow-700 focus:outline-none focus:shadow-outline"
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => handleDeleteSimilarStore(store.id)}
               className="px-4 py-2 font-bold text-white bg-red-500 rounded hover:bg-red-700 focus:outline-none focus:shadow-outline"
             >
               Delete
@@ -849,7 +957,37 @@ const BeststoresForm = () => {
 </div>
 
       </div>
-
+      <Transition appear show={isSimilarOpen} as={React.Fragment}>
+        <Dialog as="div" open={isSimilarOpen} onClose={() => setIsSimilarOpen(false)} className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen p-4 text-center">
+            <Dialog.Panel className="max-w-lg p-6 mx-auto bg-white rounded shadow-lg">
+              <Dialog.Title as="h3" className="text-lg font-bold">Item Form</Dialog.Title>
+              <button className="absolute top-2 right-2" onClick={() => setIsSimilarOpen(false)}>
+                <XIcon className="w-6 h-6 text-gray-500" />
+              </button>
+              <form onSubmit={handleSaveSimilarStore}>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">Name</label>
+                  <input
+                    type="text"
+                    value={similarStoreName}
+                    onChange={(e) => setSimilarStoreName(e.target.value)}
+                    className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                    required
+                  />
+                </div>
+               
+                <button
+                  type="submit"
+                  className="px-4 py-2 font-bold text-white bg-green-500 rounded hover:bg-green-700 focus:outline-none focus:shadow-outline"
+                >
+                  {editId ? 'Update Item' : 'Add Item'}
+                </button>
+              </form>
+            </Dialog.Panel>
+          </div>
+        </Dialog>
+      </Transition>
 
       <Transition appear show={itemisOpen} as={React.Fragment}>
         <Dialog as="div" open={itemisOpen} onClose={() => setItemIsOpen(false)} className="fixed inset-0 z-50 overflow-y-auto">

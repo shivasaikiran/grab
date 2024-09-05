@@ -8,6 +8,9 @@ import { auth } from '@/Firebase/Config'; // Assuming db is needed elsewhere in 
 import { signOut } from 'firebase/auth';
 import {  animateScroll as scroll } from 'react-scroll';
 import { useRouter } from 'next/router';
+import { db } from '@/Firebase/Config';
+import { getDocs, collection } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 
 
 
@@ -18,8 +21,12 @@ const Navbar = () => {
   const [isOfferDropdownOpen, setIsOfferDropdownOpen] = useState(false);
   const [user, setUser] = useState(null);
   const router = useRouter(); 
+  const [notifications, setNotifications] = useState([]);
   
-  const ref = useRef(null);
+  
+  
+  const menuRef = useRef(null);
+  const notRef = useRef(null);
   const userDropdownRef = useRef(null);
   const categoryDropdownRef = useRef(null);
   const offerDropdownRef = useRef(null);
@@ -32,6 +39,31 @@ const Navbar = () => {
   const toggleDropdown = () => {
     setIsNotOpen(!isnotOpen);
   }
+
+  const handleMenuToggle = () => setIsOpen(!isOpen);
+
+  // Handle click outside
+  
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  const fetchNotifications = async () => {
+    try {
+      const notificationRef = collection(db, 'notifications');
+      const notificationSnapshot = await getDocs(notificationRef);
+      const notificationList = notificationSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setNotifications(notificationList);
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+      toast.error('Failed to fetch notifications. Please try again.');
+    }
+  };
+  
+  
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -88,6 +120,12 @@ const Navbar = () => {
         if (offermobDropdownRef.current && !offermobDropdownRef.current.contains(event.target)) {
           setIsOfferDropdownOpen(false);
         }
+        if (menuRef.current && !menuRef.current.contains(event.target)) {
+          setIsOpen(false);
+        }
+        if (notRef.current && !notRef.current.contains(event.target)) {
+          setIsNotOpen(false);
+        }
         
         
       } else {
@@ -99,6 +137,9 @@ const Navbar = () => {
         }
         if (offerDropdownRef.current && !offerDropdownRef.current.contains(event.target)) {
           setIsOfferDropdownOpen(false);
+        }
+        if (notRef.current && !notRef.current.contains(event.target)) {
+          setIsNotOpen(false);
         }
       }
     };
@@ -120,20 +161,21 @@ const Navbar = () => {
     setIsOfferDropdownOpen(!isOfferDropdownOpen);
   };
 
-  const handleDropdownItemClick = () => {
+  const handleDropdownItemClick = (link) => {
     setIsCategoryDropdownOpen(false);
     setIsOfferDropdownOpen(false);
-    setIsOpen(true)
+    router.push(link); // Use `router.push` for Next.js routing
+    setIsOpen(false);
+    setIsNotOpen(false);
   };
-
   
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md lg:p-6 md:p-2">
       <div className="flex items-center justify-between h-16 px-2 mx-auto lg:container lg:h-8">
         <div className="flex items-center ">
-          <button onClick={() => setIsOpen(!isOpen)} className="mr-4 text-xl text-green-600 md:hidden">
-            <FaBars size={24} />
-          </button>
+        <button onClick={handleMenuToggle} ref={menuRef} className="mr-4 text-xl text-green-600 md:hidden">
+        <FaBars size={24} />
+      </button>
           <Link href="/">
             <div className="flex items-center md:flex lg:mt-0 mt-[5px]">
               <Image src={logo} alt="logo" className="w-[77px] h-10 md:w-[130px] md:h-[44px]" />
@@ -219,17 +261,39 @@ const Navbar = () => {
       />
     </div>
         
-    <div className="relative">
+    <div className="relative" ref={notRef}>
       <FaBell 
         className="ml-4 text-xl text-green-500 cursor-pointer" 
         onClick={toggleDropdown} 
       />
-      {isnotOpen && (
-        <div className="absolute right-0 w-64 mt-2 bg-white border border-gray-300 rounded shadow-lg">
-          <ul className="py-2">
-            <li className="px-4 py-2 hover:bg-gray-100">Notification 1</li>
-            <li className="px-4 py-2 hover:bg-gray-100">Notification 2</li>
-            <li className="px-4 py-2 hover:bg-gray-100">Notification 3</li>
+       {notifications.length > 0 && (
+          <span className="absolute top-[-6px] right-[-6px] flex items-center justify-center w-5 h-5 text-xs text-white bg-red-500 rounded-full">
+            {notifications.length}
+          </span>
+        )}
+     {isnotOpen && (
+        <div className="absolute right-0 w-64 mt-3 bg-white border border-gray-300 rounded shadow-lg ">
+       <ul className="py-2">
+            {notifications.length === 0 ? (
+              <li className="px-4 py-2 text-center text-gray-500">No notifications</li>
+            ) : (
+              notifications.map((notification) => (
+                <li
+                  key={notification.id}
+                  className="flex items-center px-4 py-2 cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleDropdownItemClick(notification.selectedPath)} // Handle item click
+                >
+                  {notification.imageUrl && (
+                    <img
+                      src={notification.imageUrl}
+                      alt={notification.title}
+                      className="w-10 h-10 mr-3 rounded-full"
+                    />
+                  )}
+                  <span>{notification.title}</span>
+                </li>
+              ))
+            )}
           </ul>
         </div>
       )}
@@ -240,7 +304,7 @@ const Navbar = () => {
           {user ? (
             <div className="relative" ref={userDropdownRef}>
               {isUserDropdownOpen && (
-                <div className="absolute right-0 z-50 w-48 bg-white rounded-lg shadow-lg top-full">
+                <div className="absolute right-0 z-50 w-48 bg-white rounded-lg shadow-lg top-4 ">
                   <p className="block px-4 py-2 text-gray-700">{user.displayName}</p>
                   {user.email === 'grabdealsdailyindia@gmail.com' && (
                     <Link href="/admin-dashboard-online" className="block px-4 py-2 text-gray-700 hover:bg-gray-100 focus:bg-gray-100">Admin</Link>
@@ -257,7 +321,7 @@ const Navbar = () => {
             </span>
           )}
         </div>
-        <div className={`md:hidden ${isOpen ? 'block' : 'hidden'} absolute top-16 z-50 left-0 right-0 bg-white border-b border-gray-200 shadow-md`}>
+        <div ref={menuRef} className={`md:hidden ${isOpen ? 'block' : 'hidden'}  absolute top-16 z-50 left-0 right-0 bg-white border-b border-gray-200 shadow-md`}>
           <div className="flex flex-col p-4 space-y-2">
           <div className='relative border-b-2 border-green-100' ref={offermobDropdownRef}>
     <a href="#" onClick={toggleOfferDropdown} className="font-bold text-gray-700 text-[16px] hover:text-green-600 flex items-center space-x-2">
@@ -269,16 +333,16 @@ const Navbar = () => {
         {/* Cone/Caret */}
         <div className="absolute w-0 h-0 transform -translate-x-1/2 border-b-4 -top-2 left-1/2 border-x-4 border-x-transparent border-b-green-500"></div>
         <div className="grid grid-cols-1 gap-2 px-4 py-3 text-center">
-          <a href='/flipkart-deals-online' className="block px-4 py-2 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
+          <a href='/flipkart-deals-online' className="block px-4 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
             <h3 className="font-bold text-black hover:text-green-600">FlipKart Deals</h3>
           </a>
-          <a href='/amazon-deals-online' className="block px-4 py-2 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
+          <a href='/amazon-deals-online' className="block px-4 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
             <h3 className="font-bold text-black hover:text-green-600">Amazon Deals</h3>
           </a>
-          <a href='/myntra-deals-online' className="block px-4 py-2 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
+          <a href='/myntra-deals-online' className="block px-4 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
             <h3 className="font-bold text-black hover:text-green-600">Myntra Deals</h3>
           </a>
-          <a href='/meesho-deals-online' className="block px-4 py-2 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
+          <a href='/meesho-deals-online' className="block px-4 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
             <h3 className="font-bold text-black hover:text-green-600">Meesho Deals</h3>
           </a>
         </div>
@@ -295,28 +359,28 @@ const Navbar = () => {
         {/* Cone/Caret */}
         <div className="absolute w-0 h-0 transform -translate-x-1/2 border-b-4 -top-2 left-1/2 border-x-4 border-x-transparent border-b-green-500"></div>
         <div className="grid grid-cols-1 gap-2 px-4 py-3 text-center">
-          <a href='/mobile-offers-online' className="block px-4 py-2 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
+          <a href='/mobile-offers-online' className="block px-4 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
             <h3 className="font-bold text-black hover:text-green-600">Mobile</h3>
           </a>
-          <a href='/electronics-offers-online' className="block px-4 py-2 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
+          <a href='/electronics-offers-online' className="block px-4 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
             <h3 className="font-bold text-black hover:text-green-600">Electronics</h3>
           </a>
-          <a href='/fashion-offers-online' className="block px-4 py-2 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
+          <a href='/fashion-offers-online' className="block px-4 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
             <h3 className="font-bold text-black hover:text-green-600">Fashion</h3>
           </a>
-          <a href='/footwear-offers-online' className="block px-4 py-2 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
+          <a href='/footwear-offers-online' className="block px-4 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
             <h3 className="font-bold text-black hover:text-green-600">Footwear</h3>
           </a>
-          <a href='/beauty-offers-online' className="block px-4 py-2 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
+          <a href='/beauty-offers-online' className="block px-4 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
             <h3 className="font-bold text-black hover:text-green-600">Beauty</h3>
           </a>
-          <a href='/baby-kids-offers-online' className="block px-4 py-2 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
+          <a href='/baby-kids-offers-online' className="block px-4 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
             <h3 className="font-bold text-black hover:text-green-600">Baby & Kids</h3>
           </a>
-          <a href='/health-fitness-offers-online' className="block px-4 py-2 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
+          <a href='/health-fitness-offers-online' className="block px-4 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
             <h3 className="font-bold text-black hover:text-green-600">Health & Fitness</h3>
           </a>
-          <a href='/home-kitchen-offers-online' className="block px-4 py-2 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
+          <a href='/home-kitchen-offers-online' className="block px-4 transition-colors duration-200 ease-in-out rounded hover:bg-green-100">
             <h3 className="font-bold text-black hover:text-green-600">Home & Kitchen</h3>
           </a>
         </div>
@@ -337,27 +401,54 @@ const Navbar = () => {
             <FaSearch className="absolute text-gray-500 top-2 right-3"  onClick={handleSearch} />
           </div>
          
-          <div className="relative">
-      <FaBell 
-        className="ml-4 text-xl text-green-500 cursor-pointer" 
-        onClick={toggleDropdown} 
-      />
-      {/* {isOpen && (
-        <div className="absolute right-0 w-64 mt-2 bg-white border border-gray-300 rounded shadow-lg">
+          <div className="relative" ref={notRef}>
+      {/* Bell Icon with Notification Badge */}
+      <div className="relative">
+        <FaBell
+          className="ml-4 text-xl text-green-500 cursor-pointer"
+          onClick={toggleDropdown}
+        />
+        {notifications.length > 0 && (
+          <span className="absolute top-[-6px] right-[-6px] flex items-center justify-center w-5 h-5 text-xs text-white bg-red-500 rounded-full">
+            {notifications.length}
+          </span>
+        )}
+      </div>
+
+      {/* Dropdown Menu */}
+      {isnotOpen && (
+        <div className="absolute right-0 w-64 mt-3 bg-white border border-gray-300 rounded shadow-lg ">
           <ul className="py-2">
-            <li className="px-4 py-2 hover:bg-gray-100">Notification 1</li>
-            <li className="px-4 py-2 hover:bg-gray-100">Notification 2</li>
-            <li className="px-4 py-2 hover:bg-gray-100">Notification 3</li>
+            {notifications.length === 0 ? (
+              <li className="px-4 py-2 text-center text-gray-500">No notifications</li>
+            ) : (
+              notifications.map((notification) => (
+                <li
+                  key={notification.id}
+                  className="flex items-center px-4 py-2 cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleDropdownItemClick(notification.selectedPath)}
+                >
+                  {notification.imageUrl && (
+                    <img
+                      src={notification.imageUrl}
+                      alt={notification.title}
+                      className="w-10 h-10 mr-3 rounded-full"
+                    />
+                  )}
+                  <span>{notification.title}</span>
+                </li>
+              ))
+            )}
           </ul>
         </div>
-      )} */}
+      )}
     </div>
           <div className="relative" ref={usermobDropdownRef}>
             <Link href="/profile">
               <FaRegUserCircle className="ml-4 text-xl text-green-500 cursor-pointer" onClick={toggleUserDropdown} />
             </Link>
             {isUserDropdownOpen && (
-              <div className="absolute right-0 z-50 w-48 bg-white rounded-lg shadow-lg top-full">
+              <div className="absolute right-0 z-50 w-48 mt-2 bg-white rounded-lg shadow-lg ">
                 {user ? (
                   <>
                     <p className="block px-4 py-2 text-gray-700">{user.displayName}</p>

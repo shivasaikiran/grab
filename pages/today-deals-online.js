@@ -6,12 +6,13 @@ import Product1 from '@/components/product1';
 import Product2 from '@/components/Product2';
 import Product3 from '@/components/Product3';
 import path from '../Images/path.png'
-import { FaArrowLeft, FaArrowRight, FaFacebook, FaInstagram, FaWhatsapp } from 'react-icons/fa';
+import { FaArrowLeft, FaArrowRight, FaFacebook, FaFilter, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import Link from 'next/link';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 import discount from '../Images/discount.png'
+
 
 const Todaydeals = () => {
   const [banners, setBanners] = useState([]);
@@ -19,6 +20,11 @@ const Todaydeals = () => {
  
   // const [products, setProducts] = useState([]);
   const [deals, setDeals] = useState([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+const handleFilterToggle = () => {
+  setIsDropdownOpen(!isDropdownOpen);
+};
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -184,9 +190,10 @@ const [showMore, setShowMore] = useState(false);
     </div>
   ))}
 </div>
-        <div className="p-1   relative mb-1 bg-green-500 lg:mb-0 lg:mr-2 w-full lg:w-[30%] h-[90px] lg:h-[130px] flex lg:flex-col flex-row  lg:space-y-2">
+
+        <div className="p-1 hidden lg:flex    relative mb-1 bg-green-500 lg:mb-0 lg:mr-2 w-full lg:w-[30%] h-[90px] lg:h-[130px] lg:flex-col flex-row  lg:space-y-2">
           <span className="relative inline-block mb-1 mr-2 lg:mb-2 lg:top-0 top-7 ">
-            <h1 className="font-bold text-white lg:text-center text-start lg:text-4xl">Today deals  </h1>
+            <h1 className="font-bold text-center text-white lg:text-4xl">Today deals  </h1>
             <span className="absolute hidden sm:block bottom-[-4px] left-24 lg:left-20 lg:w-[230px] w-[160px] h-[2px] bg-white"></span>
           </span>
           <div className="flex justify-center">
@@ -215,8 +222,57 @@ const [showMore, setShowMore] = useState(false);
     </div>
   ))}
 </div>
+<div className="flex justify-center w-full px-4 mt-4 mb-4 lg:hidden md:hidden">
+  <div className="flex flex-row space-x-4 p-2 justify-between border-red-500 border bg-white w-full max-w-[400px]  rounded-md">
+    <button className="flex items-center text-white text-[12px] p-2 bg-red-500 font-bold rounded-3xl btn-join-now">
+      Join Now
+      <span className="ml-2 text-white"><FaArrowRight /></span>
+    </button>
+    <FaInstagram size={30} className="text-red-500 transition-transform duration-300 hover:scale-125" />
+    <FaWhatsapp size={30} className="text-green-500 transition-transform duration-300 hover:scale-125" />
+    <FaFacebook size={30} className="text-blue-500 transition-transform duration-300 hover:scale-125" />
+  </div>
+</div>
 
       </div>
+
+      <div className="lg:hidden md:hidden w-40% px-4">
+      <div className="mb-4 w-[350px] lg:hidden md:hidden">
+          <h2 className="text-2xl font-bold text-black sm:text-3xl">
+            <span className="relative inline-block mr-2">
+              Today Deals
+              <span className="absolute bottom-[-4px] left-0 lg:w-[155px] w-[140px] h-[2px] bg-[#26ca43]"></span>
+            </span>
+          </h2>
+        </div>
+     
+      
+     
+        <div className="overflow-x-auto">
+          <div className="flex mt-2 mb-2 space-x-4 min-w-max">
+            {[
+              { label: 'Mobile', href: '/mobile-deals-online' },
+              { label: 'Fashion', href: '/fashion-deals-online' },
+              { label: 'Footwear', href: '/footwear-deals-online' },
+              { label: 'Electronics', href: '/electronics-deals-online' },
+              { label: 'Beauty', href: '/beauty-deals-online' },
+              { label: 'Baby & Kids', href: '/baby-kids-deals-online' },
+              { label: 'Health & Fitness', href: '/health-fitness-deals-online' },
+              { label: 'Home & Kitchen', href: '/home-kitchen-deals-online' },
+              { label: 'More', href: '/' }
+            ].map((category) => (
+              <Link href={category.href} key={category.label}>
+                <div className="flex items-center p-3 mb-3 text-xs transition-all duration-300 ease-in-out border border-gray-300 rounded-md cursor-pointer hover:border-green-500 hover:text-green-500 hover:bg-green-50">
+                  {category.label}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+    
+    </div>
+
+    
 
       {/* Banners Section */}
       {/* <Product2 /> */}
@@ -351,59 +407,56 @@ const [showMore, setShowMore] = useState(false);
       <Product1 />
       <Product3/>
       <Product1/> */}
-      <div className="grid justify-center grid-cols-3 gap-2 px-6 mt-8 mb-10 lg:gap-4 sm:grid-cols-8">
-      <Link href='/Mobile-deals-online'><div className="flex justify-center">
+       <div className="justify-center hidden grid-cols-3 gap-2 px-6 mt-8 mb-10 lg:grid lg:gap-4 lg:grid-cols-8 md:grid md:gap-4 md:grid-cols-8">
+       {/* Other Links */}
+      <Link href='/mobile-deals-online'><div className="flex justify-center">
           <div className="flex items-center justify-center p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
           <p className='text-xs font-bold lg:text-base hover:text-green-500'>Mobile</p>
           </div>
         </div></Link> 
        
-      <Link href='/Electronics-deals-online'><div className="flex justify-center">
+      <Link href='/electronics-deals-online'><div className="flex justify-center">
           <div className="flex items-center justify-center p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
           <p className='text-xs font-bold lg:text-base hover:text-green-500'>Electronics</p>
           </div>
         </div></Link>
-        <Link href='/Fashion-deals-online'><div className="flex justify-center">
+        <Link href='/fashion-deals-online'><div className="flex justify-center">
           <div className="flex items-center justify-center p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
           <p className='text-xs font-bold lg:text-base hover:text-green-500'>Fashion</p>
           </div>
         </div></Link>
-        <Link href='/Footware-deals-online'><div className="flex justify-center">
+        <Link href='/footwear-deals-online'><div className="flex justify-center">
           <div className="flex items-center justify-center p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
-          <p className='text-xs font-bold lg:text-base hover:text-green-500'>Footware</p>
+          <p className='text-xs font-bold lg:text-base hover:text-green-500'>Footwear</p>
           </div>
         </div></Link>
-        <Link href='/Beauty-deals-online'><div className="flex justify-center">
+        <Link href='/beauty-deals-online'><div className="flex justify-center">
           <div className="flex items-center justify-center p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
           <p className='text-xs font-bold lg:text-base hover:text-green-500'>Beauty</p>
           </div>
         </div></Link>
-        <Link href='/Baby-kids-deals-online'><div className="flex justify-center">
-          <div className="flex items-center justify-center p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
-          <p className='text-xs font-bold lg:text-base hover:text-green-500'>Baby-Kids</p>
+        <Link href='/baby-kids-deals-online'><div className="flex justify-center">
+          <div className="flex items-center justify-center lg:p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
+          <p className='text-xs font-bold lg:text-base hover:text-green-500'>Baby & Kids</p>
           </div>
         </div></Link>
-        <Link href='/Health-fitness-deals-online'><div className="flex justify-center">
-          <div className="flex items-center justify-center p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
-          <p className='text-xs font-bold lg:text-base hover:text-green-500'>Health-Fitness</p>
+        <Link href='/health-fitness-deals-online'><div className="flex justify-center">
+          <div className="flex items-center justify-center lg:p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
+          <p className='text-xs font-bold lg:text-base hover:text-green-500'>Health & Fitness</p>
           </div>
         </div></Link>
-        <Link href='/Home-kitchen-deals-online'><div className="flex justify-center">
-          <div className="flex items-center justify-center p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
-          <p className='text-xs font-bold lg:text-base hover:text-green-500'>Home-Kitchen</p>
+        <Link href='/home-kitchen-deals-online'><div className="flex justify-center">
+          <div className="flex items-center justify-center lg:p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
+          <p className='text-xs font-bold lg:text-base hover:text-green-500'>Home & Kitchen</p>
           </div>
         </div></Link> 
-        <Link href='/'><div className="flex justify-center">
-          <div className="flex items-center justify-center p-2 lg:hidden  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">
-          <p className='text-xs font-bold lg:text-base hover:text-green-500'>More</p>
-          </div>
-        </div></Link> 
+       
 
        
         
         
       </div>
-      <div class="  bg-white flex px-6">
+      <div class="  bg-white flex px-4 lg:px-6 md:px-6">
   
   
 

@@ -14,6 +14,26 @@ const StoreDetail = () => {
   const [blogs, setBlogs] = useState([]);
   const [mobileItems, setMobileItems] = useState([]);
   const [showAllCoupons, setShowAllCoupons] = useState(false);
+  const [similarStores, setSimilarStores] = useState([]);
+
+  // Fetch similar stores from Firestore
+  useEffect(() => {
+    const fetchSimilarStores = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "similarStores"));
+        const stores = [];
+        querySnapshot.forEach((doc) => {
+          stores.push({ id: doc.id, ...doc.data() });
+        });
+        setSimilarStores(stores);
+      } catch (error) {
+        console.error("Error fetching similar stores: ", error);
+      }
+    };
+
+    fetchSimilarStores();
+  }, []);
+
 
   useEffect(() => {
     if (!storeName) return;
@@ -88,11 +108,15 @@ const StoreDetail = () => {
     <div className='mt-16 lg:mt-[70px]'>
       {/* Banner Section */}
       <div className="relative flex flex-col items-center justify-center w-full h-auto lg:flex-row lg:h-[11rem]">
-        <div className="p-1 relative mb-4 bg-green-500 lg:mb-0 lg:mr-2 w-full lg:w-[30%] h-auto lg:h-[130px] flex flex-col space-y-2">
-          <span className="relative inline-block mb-2 mr-2">
-            <h1 className="text-2xl font-bold text-center text-white lg:text-4xl">Best Stores</h1>
-            <span className="absolute bottom-[-4px] left-24 lg:left-24 lg:w-[200px] w-[160px] h-[2px] bg-white"></span>
-          </span>
+        <div className="p-1 hidden relative mb-4 bg-green-500 lg:mb-0 lg:mr-2 w-full lg:w-[30%] h-auto lg:h-[130px] lg:flex flex-col space-y-2">
+        <span className="relative inline-block mb-2 mr-2">
+  <h1 className="text-4xl font-bold text-center text-white ">
+    {store.name}
+  </h1>
+  {/* Underline span adjusted to text width */}
+ 
+</span>
+
           <div className="flex justify-center">
             <div className="flex flex-row space-x-2 p-2 border-red-500 mt- lg:space-x-6 border bg-white w-[300px] justify-center rounded-md">
               <button className="flex items-center btn-join-now">
@@ -105,7 +129,7 @@ const StoreDetail = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col w-full   text-center  lg:w-2/3  h-[90px] lg:h-[130px] lg:ml-2 lg:mt-0">
+        <div className="flex flex-col w-full mt-2   text-center  lg:w-2/3  h-[90px] lg:h-[130px] lg:ml-2 lg:mt-0">
         
         <div key={store.id} className="relative w-full h-full overflow-hidden">
           <img 
@@ -115,8 +139,39 @@ const StoreDetail = () => {
             className="object-cover w-full h-full"
           />
         </div>
+        
     
             </div>
+            <div className="flex justify-center w-full px-4 mt-4 mb-4 lg:hidden md:hidden">
+  <div className="flex flex-row space-x-4 p-2 justify-between border-red-500 border bg-white w-full max-w-[400px]  rounded-md">
+    <button className="flex items-center text-white text-[12px] p-2 bg-red-500 font-bold rounded-3xl btn-join-now">
+      Join Now
+      <span className="ml-2 text-white"><FaArrowRight /></span>
+    </button>
+    <FaInstagram size={30} className="text-red-500 transition-transform duration-300 hover:scale-125" />
+    <FaWhatsapp size={30} className="text-green-500 transition-transform duration-300 hover:scale-125" />
+    <FaFacebook size={30} className="text-blue-500 transition-transform duration-300 hover:scale-125" />
+  </div>
+</div>
+<div className="lg:hidden md:hidden w-40% px-6">
+      <div className="mb-4 w-[350px] lg:hidden md:hidden">
+          <h2 className="text-2xl font-bold text-black sm:text-3xl">
+          <span className="relative inline-block">
+              {store.name}
+              <span className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-[#26ca43]"></span>
+            </span>
+          </h2>
+        </div>
+     
+      
+     
+        
+    
+    
+
+
+      </div>
+
       </div>
 
       {/* Banners Section */}
@@ -125,17 +180,16 @@ const StoreDetail = () => {
         <div className="hidden w-full p-4 bg-green-100 rounded-md md:w-1/4 sm:block">
           <h3 className="text-lg font-bold text-green-500">Similar Stores</h3>
           <div className="max-h-48">
-            <div className="mb-4">
-              <p className="ml-2">Mobile</p>
-              <p className="ml-2">Fashion</p>
-              <p className="ml-2">Footwear</p>
-              <p className="ml-2">Electronics</p>
-              <p className="ml-2">Beauty</p>
-              <p className="ml-2">Baby & Kids</p>
-              <p className="ml-2">Health & Fitness</p>
-              <p className="ml-2">Home & Kitchen</p>
-            </div>
+          <div className="mb-4">
+            {similarStores.length === 0 ? (
+              <p>No stores available</p>
+            ) : (
+              similarStores.map((store) => (
+                <p key={store.id} className="ml-2">{store.name}</p>
+              ))
+            )}
           </div>
+        </div>
           <div className="flex flex-wrap gap-4">
       {ads.map(ad => (
         <div
@@ -152,10 +206,19 @@ const StoreDetail = () => {
         </div>
       ))}
     </div>
+    
         </div>
 
         {/* Right Section */}
-        <div className="w-full p-4 md:w-3/4">
+        <div className="w-full lg:p-4 md:w-3/4">
+        <div className="mb-6 w-[350px] hidden sm:block">
+          <h2 className="text-2xl font-bold text-black sm:text-3xl">
+          <span className="relative inline-block">
+              {store.name}
+              <span className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-[#26ca43]"></span>
+            </span>
+          </h2>
+        </div>
           {mobileItems.map((item) => (
             <div key={item.id} className="p-4 mb-4 bg-white border rounded-md shadow">
               <div className="flex items-center">
@@ -174,7 +237,7 @@ const StoreDetail = () => {
                       <span>{item.itemdiscounttext}</span>
                     </div>
                     <p className="text-gray-600">{item.itemdescription}</p>
-                  </div> ,
+                  </div> 
                   <div className="flex items-center justify-end">
                     <button className="px-4 py-2 font-bold text-white bg-red-500 rounded-md">
                       Grab Deal

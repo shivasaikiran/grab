@@ -7,6 +7,7 @@ import { FaArrowLeft, FaArrowRight, FaFacebook, FaFilter, FaInstagram, FaWhatsap
 import Link from 'next/link';
 import { ImCross } from "react-icons/im";
 
+
 const Popularstores = () => {
   const [stores, setStores] = useState([]);
   
@@ -17,11 +18,7 @@ const Popularstores = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [showTrendingStores, setShowTrendingStores] = useState(true);
  
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    
-    const handleFilterToggle = () => {
-      setIsDropdownOpen(!isDropdownOpen);
-    };
+ 
 
   useEffect(() => {
     const fetchAds = async () => {
@@ -78,7 +75,8 @@ const Popularstores = () => {
   const handleCategoryClick = (category) => {
     if (selectedCategory === category) {
       setSelectedCategory(''); // Deselect the same category
-      setShowTrendingStores(true); // Show trending stores when no category is selected
+      setShowTrendingStores(true);
+       // Show trending stores when no category is selected
     } else {
       setSelectedCategory(category); // Select new category
       setShowTrendingStores(false); // Hide trending stores when a category is selected
@@ -107,7 +105,7 @@ const Popularstores = () => {
         </div>
     
             </div>
-      <div className="p-1   relative mb-1 bg-green-500 lg:mb-0 lg:mr-2 w-full lg:w-[30%] h-[90px] lg:h-[130px] flex lg:flex-col flex-row space-x-7  lg:space-y-2">
+      <div className="p-1 hidden  relative mb-1 bg-green-500 lg:mb-0 lg:mr-2 w-full lg:w-[30%] h-[90px] lg:h-[130px] lg:flex lg:flex-col flex-row space-x-7  lg:space-y-2">
           <span className="relative inline-block mb-1 mr-2 lg:mb-2 lg:top-0 top-7 ">
             <h1 className="font-bold text-white lg:text-center text-start lg:text-4xl">Best stores </h1>
             <span className="absolute hidden sm:block bottom-[-4px] left-24 lg:left-24 lg:w-[200px] w-[160px] h-[2px] bg-white"></span>
@@ -138,16 +136,43 @@ const Popularstores = () => {
     </div>
 
         </div>
+      
+        <div className="flex justify-center w-full px-4 mt-4 mb-4 lg:hidden md:hidden">
+  <div className="flex flex-row space-x-4 p-2 justify-between border-red-500 border bg-white w-full max-w-[400px]  rounded-md">
+    <button className="flex items-center text-white text-[12px] p-2 bg-red-500 font-bold rounded-3xl btn-join-now">
+      Join Now
+      <span className="ml-2 text-white"><FaArrowRight /></span>
+    </button>
+    <FaInstagram size={30} className="text-red-500 transition-transform duration-300 hover:scale-125" />
+    <FaWhatsapp size={30} className="text-green-500 transition-transform duration-300 hover:scale-125" />
+    <FaFacebook size={30} className="text-blue-500 transition-transform duration-300 hover:scale-125" />
+  </div>
+</div>
+
       </div>
-      <div className="lg:hidden w-40% px-6">
-      <button
-          onClick={handleFilterToggle}
-          className="flex items-center p-2 mt-2 mb-2 space-x-2 text-gray-700 transition-all duration-300 ease-in-out bg-white border border-gray-300 rounded-md shadow-md hover:bg-gray-100"
-        >
-          <FaFilter className="text-lg" />
-          <span>Filters</span>
-        </button>
-        {isDropdownOpen && (
+
+      <div className="lg:hidden md:hidden w-40% px-4">
+      <div className="mb-4 w-[350px] lg:hidden md:hidden">
+          <h2 className="text-2xl font-bold text-black sm:text-3xl">
+          <span className="relative inline-block">
+              Best stores
+              <span className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-[#26ca43]"></span>
+            </span>
+          </h2>
+        </div>
+     
+      
+     
+        
+    
+    
+
+
+      </div>
+
+      <div className="lg:hidden w-40% px-4">
+     
+       
   <div className="overflow-x-auto ">
   <div className="flex mt-2 mb-2 space-x-4 min-w-max">
     {['Mobile', 'Fashion', 'Footwear', 'Electronics', 'Beauty', 'Baby & Kids', 'Health & Fitness', 'Home & Kitchen'].map((category) => (
@@ -170,7 +195,7 @@ const Popularstores = () => {
     ))}
   </div>
 </div>
-        )}
+        
 
 </div>
 
@@ -320,7 +345,7 @@ const Popularstores = () => {
   <h2 className="text-2xl font-bold text-black sm:text-3xl">
     <span className="relative inline-block mr-2">
       {sectionTitle}
-      <span className="absolute bottom-[-4px] left-0 lg:w-[220px] w-[180px] h-[2px] bg-[#26ca43]"></span>
+      <span className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-[#26ca43]"></span>
     </span>
   </h2>
 </div>

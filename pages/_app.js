@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import CookieConsent from "@/components/CookieConsent";
 
+
 const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }) {
@@ -31,7 +32,7 @@ export default function App({ Component, pageProps }) {
   />
 
   
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"  />
 
   
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />

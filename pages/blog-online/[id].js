@@ -115,17 +115,17 @@ const BlogPost = () => {
           <h1 className="text-4xl font-bold">{post.title}</h1>
         </div>
         <div className="flex justify-center mt-4 lg:hidden">
-            <div className="flex flex-row space-x-8 p-2 border-red-500  lg:space-x-2 border bg-white w-[400px] justify-center rounded-md">
-            <button className="flex items-center p-2 font-bold text-white bg-red-500 rounded-3xl">
-  Join Now
-  <span className='ml-2 text-white'><FaArrowRight /></span>
-</button>
+  <div className="flex flex-row space-x-4 p-2 justify-between border-red-500 border bg-white w-full max-w-[400px] justify-center rounded-md">
+    <button className="flex items-center text-white text-[12px] p-2 bg-red-500 font-bold rounded-3xl">
+      Join Now
+      <span className="ml-2 text-white"><FaArrowRight /></span>
+    </button>
+    <FaInstagram size={30} className="text-red-500 transition-transform duration-300 hover:scale-125" />
+    <FaWhatsapp size={30} className="text-green-500 transition-transform duration-300 hover:scale-125" />
+    <FaFacebook size={30} className="text-blue-500 transition-transform duration-300 hover:scale-125" />
+  </div>
+</div>
 
-              <FaInstagram size={40} className="icon-instagram hover:scale-125" />
-              <FaWhatsapp size={40} className="icon-whatsapp hover:scale-125" />
-              <FaFacebook size={40} className="text-blue-500 hover:scale-125" />
-            </div>
-          </div>
         {/* Post Detail Content */}
         <div className="p-4 mt-6 border rounded-md shadow-md lg:p-10">
           <div className="w-full text-justify">

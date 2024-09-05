@@ -124,7 +124,7 @@ function Beauty() {
     </div>
   ))}
 </div>
-        <div className="p-1   relative mb-1 bg-green-500 lg:mb-0 lg:mr-2 w-full lg:w-[30%] h-[90px] lg:h-[130px] flex lg:flex-col flex-row space-x-4 lg:space-y-2">
+        <div className="p-1 hidden  relative mb-1 bg-green-500 lg:mb-0 lg:mr-2 w-full lg:w-[30%] h-[90px] lg:h-[130px] lg:flex lg:flex-col flex-row space-x-4 lg:space-y-2">
           <span className="relative inline-block mb-1 mr-2 lg:mb-2 lg:top-0 top-7 ">
             <h1 className="font-bold text-white text-start lg:text-center lg:text-4xl">Beauty  </h1>
             <span className="absolute hidden sm:block bottom-[-4px] left-24 lg:left-32 lg:w-[130px] w-[160px] h-[2px] bg-white"></span>
@@ -156,8 +156,59 @@ function Beauty() {
   ))}
 </div>
 
+<div className="flex justify-center w-full px-4 mt-4 mb-4 lg:hidden md:hidden">
+  <div className="flex flex-row space-x-4 p-2 justify-between border-red-500 border bg-white w-full max-w-[400px]  rounded-md">
+    <button className="flex items-center text-white text-[12px] p-2 bg-red-500 font-bold rounded-3xl btn-join-now">
+      Join Now
+      <span className="ml-2 text-white"><FaArrowRight /></span>
+    </button>
+    <FaInstagram size={30} className="text-red-500 transition-transform duration-300 hover:scale-125" />
+    <FaWhatsapp size={30} className="text-green-500 transition-transform duration-300 hover:scale-125" />
+    <FaFacebook size={30} className="text-blue-500 transition-transform duration-300 hover:scale-125" />
+  </div>
+</div>
+
       </div>
 
+      <div className="lg:hidden md:hidden w-40% px-4">
+      <div className="mb-4 w-[350px] lg:hidden md:hidden">
+          <h2 className="text-2xl font-bold text-black sm:text-3xl">
+            <span className="relative inline-block mr-2">
+            Beauty
+              <span className="absolute bottom-[-4px] left-0 lg:w-[155px] w-[85px] h-[2px] bg-[#26ca43]"></span>
+            </span>
+          </h2>
+        </div>
+     
+      
+     
+        <div className="overflow-x-auto">
+          <div className="flex mt-2 mb-2 space-x-4 min-w-max">
+            {[
+              
+              { label: 'Mobile', href: '/mobile-offers-online' },
+              { label: 'Fashion', href: '/fashion-offers-online' },
+              { label: 'Footwear', href: '/footwear-offers-online' },
+              { label: 'Electronics', href: '/electronics-offers-online' },
+              { label: 'Beauty', href: '/beauty-offers-online' },
+              { label: 'Baby & Kids', href: '/baby-kids-offers-online' },
+              { label: 'Health & Fitness', href: '/health-fitness-offers-online' },
+              { label: 'Home & Kitchen', href: '/home-kitchen-offers-online' },
+              { label: 'More', href: '/' }
+            ].map((category) => (
+              <Link href={category.href} key={category.label}>
+                <div className="flex items-center p-3 mb-3 text-xs transition-all duration-300 ease-in-out border border-gray-300 rounded-md cursor-pointer hover:border-green-500 hover:text-green-500 hover:bg-green-50">
+                  {category.label}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+    
+    
+
+
+      </div>
 
 
       {/* Main Content Section */}
@@ -168,35 +219,35 @@ function Beauty() {
         <div className="mb-4">
             <h3 className="text-lg font-bold text-green-500"> Categories</h3>
             <div>
-          <Link href='/mobile-offers-online'> <p className="ml-2">Mobile </p></Link>
+          <Link href='/mobile-deals-online'> <p className="ml-2">Mobile </p></Link>
             </div>
             <div>
               
-            <Link href='/fashion-offers-online'> <p className="ml-2">Fashion </p></Link>
+            <Link href='/fashion-deals-online'> <p className="ml-2">Fashion </p></Link>
             </div>
             <div>
               
-            <Link href='/footwear-offers-online'> <p className="ml-2">Footwear </p></Link>
+            <Link href='/footwear-deals-online'> <p className="ml-2">Footwear </p></Link>
             </div>
             <div>
              
-            <Link href='/electronics-offers-online'> <p className="ml-2">Electronics </p></Link>
+            <Link href='/electronics-deals-online'> <p className="ml-2">Electronics </p></Link>
             </div>
             <div>
               
-            <Link href='/beauty-offers-online'> <p className="ml-2">Beauty </p></Link>
+            <Link href='/beauty-deals-online'> <p className="ml-2">Beauty </p></Link>
             </div>
             <div>
               
-            <Link href='/baby-kids-offers-online'> <p className="ml-2">Baby & Kids </p></Link>
+            <Link href='/baby-kids-deals-online'> <p className="ml-2">Baby & Kids </p></Link>
             </div>
             <div>
              
-            <Link href='/health-fitness-offers-online'> <p className="ml-2">Health & Fitness </p></Link>
+            <Link href='/health-fitness-deals-online'> <p className="ml-2">Health & Fitness </p></Link>
             </div>
             <div>
              
-            <Link href='/home-kitchen-offers-online'> <p className="ml-2">Home & Kitchen</p></Link>
+            <Link href='/home-kitchen-deals-online'> <p className="ml-2">Home & Kitchen</p></Link>
             </div>
           </div>
          
@@ -325,7 +376,7 @@ function Beauty() {
         </div>
       </div>
 
-      <div className="grid justify-center grid-cols-3 gap-2 px-6 mt-8 mb-10 lg:gap-4 sm:grid-cols-7">
+      <div className="justify-center hidden grid-cols-3 gap-2 px-6 mt-8 mb-10 lg:grid lg:gap-4 lg:grid-cols-7">
        
       <Link href='/electronics-offers-online'><div className="flex justify-center">
           <div className="flex items-center justify-center p-2  border rounded-md shadow-md border-gray-300 hover:border-green-500 hover:shadow-green-500 h-[60px] w-[100px] lg:h-[70px] lg:w-[420px]">

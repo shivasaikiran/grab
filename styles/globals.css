@@ -5,6 +5,13 @@
 /* styles/globals.css */
 
 /* styles/globals.css */
+* {
+  box-sizing: border-box;
+}
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 html, body {
   margin: 0;

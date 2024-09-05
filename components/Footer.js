@@ -79,7 +79,7 @@ const Footer = () => {
       <div className="w-full mt-8 border-t border-gray-700">
         <div className="container w-full px-4 mx-auto text-center">
           <p className="mt-4 text-sm">
-            &copy; {new Date().getFullYear()} Grab Deals Daily. All Rights Reserved | <a href='https://webroj.com/'>@WEBROJ</a>
+            &copy; {new Date().getFullYear()} Grab Deals Daily. All Rights Reserved | <a href='https://webroj.com/'target="_blank" rel="noopener noreferrer">Designed by WEBROJ</a>
           </p>
         </div>
       </div>

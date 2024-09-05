@@ -37,6 +37,7 @@ import HomepageadForm from '@/components/HomepageadForm';
 import dynamic from 'next/dynamic';
 import PrivacypolicyForm from '@/components/PrivacypolicyForm';
 import TermsandconditionsForm from '@/components/TermsandconditionsForm';
+import NotificationForm from '@/components/NotificationForm';
 
 // Import components that rely on the browser environment dynamically
 const JoditEditor = dynamic(() => import('jodit-react'), { ssr: false });
@@ -152,6 +153,8 @@ const AdminDashboard = () => {
           return <TermsandconditionsForm/>;
           case 'Home page ads':
             return <HomepageadForm/>;
+            case 'Notifications':
+            return <NotificationForm/>;
     
   
               
@@ -196,6 +199,7 @@ const AdminDashboard = () => {
         <div className={`md:flex flex-col space-y-2 ${isOpen ? 'block' : 'hidden'}`}>
         <SidebarItem label="Users" onClick={() => setSelectedComponent('Users')} />
           <SidebarItem label="Blog" onClick={() => setSelectedComponent('Blog')} />
+          <SidebarItem label="Notifications" onClick={() => setSelectedComponent('Notifications')} />
           <SidebarItem label="Privacy Policy" onClick={() => setSelectedComponent('Privacy Policy')} />
           <SidebarItem label="Terms & Conditions" onClick={() => setSelectedComponent('Terms & Conditions')} />
           <SidebarItem label="Home page ads" onClick={() => setSelectedComponent('Home page ads')} />

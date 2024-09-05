@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import UAParser from 'ua-parser-js';
 import axios from 'axios';
+import { db } from '@/Firebase/Config'; // Adjust the path as necessary
+import { doc, setDoc } from 'firebase/firestore';
 
 const CookieConsent = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -9,31 +11,27 @@ const CookieConsent = () => {
   const [locationName, setLocationName] = useState('');
 
   useEffect(() => {
-    // Check if cookie consent has not been given
     if (!Cookies.get('cookieConsent')) {
       setIsVisible(true);
     } else {
-      // User accepted cookies, start tracking data
       trackUserBehavior();
     }
   }, []);
 
   const handleAcceptAllCookies = () => {
-    // Set cookie for consent
     Cookies.set('cookieConsent', 'true', { expires: 365, path: '/' });
     setIsVisible(false);
     trackUserBehavior();
     captureDeviceInfo();
     captureLocation();
+    saveCookiesToFirestore();
   };
 
   const handleCookieSettings = () => {
-    // Redirect or show cookie settings modal
     console.log('Cookie Settings Clicked');
   };
 
   const trackUserBehavior = () => {
-    // Example: Track page visits, clicks, etc.
     trackPageVisits();
     trackScrollDepth();
     trackProductClicks();
@@ -69,17 +67,14 @@ const CookieConsent = () => {
     const result = parser.getResult();
     
     const deviceInfo = {
-      deviceType: result.device.type || 'desktop', // device type (mobile, tablet, or desktop)
-      deviceModel: result.device.model || 'unknown', // specific device model
-      os: result.os.name || 'unknown', // operating system
-      browserName: result.browser.name || 'unknown', // browser name
-      browserVersion: result.browser.version || 'unknown', // browser version
+      deviceType: result.device.type || 'desktop',
+      deviceModel: result.device.model || 'unknown',
+      os: result.os.name || 'unknown',
+      browserName: result.browser.name || 'unknown',
+      browserVersion: result.browser.version || 'unknown',
     };
 
-    // Store device info in cookies
     Cookies.set('deviceInfo', JSON.stringify(deviceInfo), { expires: 365, path: '/' });
-
-    console.log('Device Info:', deviceInfo); // For debugging purposes
   };
 
   const captureLocation = () => {
@@ -89,9 +84,8 @@ const CookieConsent = () => {
         const location = { latitude, longitude };
         Cookies.set('location', JSON.stringify(location), { expires: 365, path: '/' });
 
-        // Reverse geocode to get the location name
         try {
-          const apiKey = 'YOU'; // Replace with your API key
+          const apiKey = 'YOUR_GOOGLE_API_KEY'; // Replace with your API key
           const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`);
           const locationName = response.data.results[0]?.formatted_address || 'Unknown Location';
           setLocationName(locationName);
@@ -103,19 +97,44 @@ const CookieConsent = () => {
     }
   };
 
+  const saveCookiesToFirestore = async () => {
+    try {
+      console.log('Saving cookies to Firestore...');
+      const userCookies = {
+        email: Cookies.get('email'),
+        phone: Cookies.get('phone'),
+        gender: Cookies.get('gender'),
+        deviceInfo: Cookies.get('deviceInfo'),
+        location: Cookies.get('location'),
+        locationName: Cookies.get('locationName'),
+      };
+
+      await setDoc(doc(db, 'Cookies', ), userCookies);
+      console.log('Cookies data saved to Firestore');
+    } catch (error) {
+      console.error('Error saving cookies data to Firestore:', error);
+    }
+  };
+
+  console.log('Cookie Data:', {
+    email: Cookies.get('email'),
+    phone: Cookies.get('phone'),
+    gender: Cookies.get('gender'),
+    deviceInfo: Cookies.get('deviceInfo'),
+    location: Cookies.get('location'),
+    locationName: Cookies.get('locationName'),
+  });
+  
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const { email, phone, gender } = userInfo;
 
-    // Store user info in cookies
     Cookies.set('email', email, { expires: 365, path: '/' });
     Cookies.set('phone', phone, { expires: 365, path: '/' });
     Cookies.set('gender', gender, { expires: 365, path: '/' });
     
-    // Simulate Login Status
     Cookies.set('loggedIn', 'true', { expires: 365, path: '/' });
 
-    // Start tracking location after form submission
     captureLocation();
   };
 
@@ -162,23 +181,6 @@ const textStyle = {
   margin: '10px 0',
   fontSize: '14px',
   textAlign: 'center',
-};
-
-const formStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '10px',
-  width: '100%',
-  maxWidth: '300px',
-  margin: '0 auto',
-};
-
-const inputStyle = {
-  padding: '10px',
-  borderRadius: '5px',
-  border: '1px solid #ccc',
-  width: '100%',
-  boxSizing: 'border-box',
 };
 
 const buttonContainerStyle = {

@@ -197,7 +197,7 @@ const [showMore, setShowMore] = useState(false);
     </div>
   ))}
 </div>
-        <div className="p-1   relative mb-1 bg-green-500 lg:mb-0 lg:mr-2 w-full lg:w-[30%] h-[90px] lg:h-[130px] flex lg:flex-col flex-row  lg:space-y-2">
+        <div className="p-1 hidden  relative mb-1 bg-green-500 lg:mb-0 lg:mr-2 w-full lg:w-[30%] h-[90px] lg:h-[130px] lg:flex lg:flex-col flex-row  lg:space-y-2">
           <span className="relative inline-block mb-1 mr-2 lg:mb-2 lg:top-0 top-7 ">
             <h1 className="font-bold text-white lg:text-center text-start lg:text-4xl">Myntra Deals  </h1>
             <span className="absolute hidden sm:block bottom-[-4px] left-24 lg:left-20 lg:w-[230px] w-[160px] h-[2px] bg-white"></span>
@@ -229,8 +229,55 @@ const [showMore, setShowMore] = useState(false);
   ))}
 </div>
 
+<div className="flex justify-center w-full px-4 mt-4 mb-4 lg:hidden md:hidden">
+  <div className="flex flex-row space-x-4 p-2 justify-between border-red-500 border bg-white w-full max-w-[400px]  rounded-md">
+    <button className="flex items-center text-white text-[12px] p-2 bg-red-500 font-bold rounded-3xl btn-join-now">
+      Join Now
+      <span className="ml-2 text-white"><FaArrowRight /></span>
+    </button>
+    <FaInstagram size={30} className="text-red-500 transition-transform duration-300 hover:scale-125" />
+    <FaWhatsapp size={30} className="text-green-500 transition-transform duration-300 hover:scale-125" />
+    <FaFacebook size={30} className="text-blue-500 transition-transform duration-300 hover:scale-125" />
+  </div>
+</div>
+
       </div>
 
+      <div className="lg:hidden md:hidden w-40% px-4">
+      <div className="mb-4 w-[350px] lg:hidden md:hidden">
+          <h2 className="text-2xl font-bold text-black sm:text-3xl">
+            <span className="relative inline-block mr-2">
+            Myntra
+              <span className="absolute bottom-[-4px] left-0 lg:w-[155px] w-[90px] h-[2px] bg-[#26ca43]"></span>
+            </span>
+          </h2>
+        </div>
+     
+      
+     
+        <div className="overflow-x-auto">
+          <div className="flex mt-2 mb-2 space-x-4 min-w-max">
+            {[
+               { label: 'Amazon', href: '/amazon-deals-online' },
+              { label: 'Flipkart', href: '/flipkart-deals-online' },
+              { label: 'Meesho', href: '/meesho-deals-online' },
+              { label: 'Myntra', href: '/myntra-deals-online' },
+              
+              { label: 'More', href: '/' }
+            ].map((category) => (
+              <Link href={category.href} key={category.label}>
+                <div className="flex items-center p-3 mb-3 text-xs transition-all duration-300 ease-in-out border border-gray-300 rounded-md cursor-pointer hover:border-green-500 hover:text-green-500 hover:bg-green-50">
+                  {category.label}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+    
+    
+
+
+      </div>
       {/* Banners Section */}
       {/* <Product2 /> */}
       <div className="px-1 lg:hidden">
@@ -364,7 +411,7 @@ const [showMore, setShowMore] = useState(false);
       <Product1 />
       <Product3/>
       <Product1/> */}
-      <div className="grid justify-center grid-cols-3 px-2 mt-8 mb-10 lg:px-8 sm:grid-cols-3 ">
+       <div className="justify-center hidden px-2 mt-8 mb-10 lg:grid lg:grid-cols-3 lg:px-8 sm:grid-cols-3 ">
       {ads.slice(0, 3).map((ad, index) => (
         <Link href={staticPaths[index]} key={ad.id}>
           <div className="flex justify-center">
