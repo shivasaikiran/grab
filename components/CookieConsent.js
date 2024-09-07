@@ -107,6 +107,7 @@ const CookieConsent = () => {
         deviceInfo: Cookies.get('deviceInfo'),
         location: Cookies.get('location'),
         locationName: Cookies.get('locationName'),
+        products: Cookies.get('productsClicked'),
       };
 
       await setDoc(doc(db, 'Cookies', ), userCookies);
