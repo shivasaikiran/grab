@@ -9,6 +9,7 @@ const CookieConsent = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [userInfo, setUserInfo] = useState({ email: '', phone: '', gender: '' });
   const [locationName, setLocationName] = useState('');
+ 
 
   useEffect(() => {
     if (!Cookies.get('cookieConsent')) {
@@ -22,6 +23,7 @@ const CookieConsent = () => {
     Cookies.set('cookieConsent', 'true', { expires: 365, path: '/' });
     setIsVisible(false);
     trackUserBehavior();
+    trackProductClicks();
     captureDeviceInfo();
     captureLocation();
     saveCookiesToFirestore();
@@ -34,7 +36,7 @@ const CookieConsent = () => {
   const trackUserBehavior = () => {
     trackPageVisits();
     trackScrollDepth();
-    trackProductClicks();
+    
   };
 
   const trackPageVisits = () => {
@@ -51,17 +53,30 @@ const CookieConsent = () => {
     });
   };
 
-  const trackProductClicks = () => {
-    document.querySelectorAll('.product').forEach(product => {
-      product.addEventListener('click', (e) => {
-        const productId = e.target.dataset.productId;
-        let productsClicked = Cookies.get('productsClicked') ? JSON.parse(Cookies.get('productsClicked')) : [];
-        productsClicked.push({ productId, timestamp: new Date().toISOString() });
-        Cookies.set('productsClicked', JSON.stringify(productsClicked), { expires: 365, path: '/' });
-      });
-    });
-  };
+  // Function to track product clicks
+  useEffect(() => {
+    // This code will only run on the client side after the component mounts
+    const trackProductClicks = () => {
+      document.querySelectorAll('.product').forEach(product => {
+        product.addEventListener('click', (e) => {
+          const productId = e.target.closest('.product').dataset.productId;
+          const productName = e.target.closest('.product').dataset.productName;
 
+          let productsClicked = Cookies.get('productsClicked') 
+            ? JSON.parse(Cookies.get('productsClicked')) 
+            : [];
+
+          productsClicked.push({ productId, productName, timestamp: new Date().toISOString() });
+
+          // Store the updated array in cookies
+          Cookies.set('productsClicked', JSON.stringify(productsClicked), { expires: 365, path: '/' });
+        });
+      });
+    };
+
+    // Initialize product click tracking
+    trackProductClicks();
+  }, []); 
   const captureDeviceInfo = () => {
     const parser = new UAParser();
     const result = parser.getResult();
@@ -124,6 +139,7 @@ const CookieConsent = () => {
     deviceInfo: Cookies.get('deviceInfo'),
     location: Cookies.get('location'),
     locationName: Cookies.get('locationName'),
+    products: Cookies.get('productsClicked'),
   });
   
   const handleFormSubmit = (e) => {

@@ -114,7 +114,7 @@ const BlogPost = () => {
         <div className="w-full h-[9rem] bg-green-500 text-white flex items-center justify-center rounded-lg">
           <h1 className="text-4xl font-bold">{post.title}</h1>
         </div>
-        {/* <div className="flex justify-center mt-4 lg:hidden">
+        <div className="flex justify-center mt-4 lg:hidden">
   <div className="flex flex-row space-x-4 p-2 justify-between border-red-500 border bg-white w-full max-w-[400px] justify-center rounded-md">
     <button className="flex items-center text-white text-[12px] p-2 bg-red-500 font-bold rounded-3xl">
       Join Now
@@ -124,7 +124,7 @@ const BlogPost = () => {
     <FaWhatsapp size={30} className="text-green-500 transition-transform duration-300 hover:scale-125" />
     <FaFacebook size={30} className="text-blue-500 transition-transform duration-300 hover:scale-125" />
   </div>
-</div> */}
+</div>
 
         {/* Post Detail Content */}
         <div className="p-4 mt-6 border rounded-md shadow-md lg:p-10">

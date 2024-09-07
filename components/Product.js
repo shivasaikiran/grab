@@ -62,6 +62,8 @@ const PrevArrow = (props) => {
 const Product = () => {
   const [products, setProducts] = useState([]);
 
+  
+
   useEffect(() => {
     const fetchProducts = async () => {
       const querySnapshot = await getDocs(collection(db, 'todaydeals'));
@@ -113,13 +115,13 @@ const Product = () => {
         <Slider {...settings} className="mt-2 " >
           {products.map((product) => (
              
-            <div key={product.id}  className="px-2 mb-3 " >
+            <div key={product.id} data-product-id={product.id} data-product-title={product.title} className="px-2 mb-3 product" >
                <a href={product.link} target="_blank" rel="noopener noreferrer">
               <div className="relative flex flex-col justify-between lg:h-64 h-[200px] border bg-white rounded-sm shadow-md group hover:shadow-green-300 hover:border-green-500">
                 <div className="overflow-hidden aspect-w-1 h-[200px]">
                 <img
                 i
-                    className="object-cover w-full h-full transition-all duration-300 product group-hover:scale-125"
+                    className="object-cover w-full h-full transition-all duration-300 group-hover:scale-125"
                     src={product.imageUrl}
                     alt={product.title}
                   // Add a default height

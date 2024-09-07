@@ -200,14 +200,7 @@ const StoreDetail = () => {
 
         {/* Right Section */}
         <div className="w-full lg:p-4 md:w-3/4">
-        <div className="mb-6 w-[350px] hidden sm:block">
-          <h2 className="text-2xl font-bold text-black sm:text-3xl">
-          <span className="relative inline-block">
-              {store.name}
-              <span className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-[#26ca43]"></span>
-            </span>
-          </h2>
-        </div>
+        
           {mobileItems.map((item) => (
             <div key={item.id} className="p-4 mb-4 bg-white border rounded-md shadow">
               <div className="flex items-center">
