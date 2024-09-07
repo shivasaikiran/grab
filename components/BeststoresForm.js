@@ -30,6 +30,7 @@ const BeststoresForm = () => {
   const [title, setTitle] = useState('');
   const [name, setName] = useState('');
   const [bannerimg, setBannerimg] = useState(null);
+  const [bannerlogo, setBannerlogo] = useState(null);
   const [discount, setDiscount] = useState('');
   const [image, setImage] = useState(null);
  
@@ -51,6 +52,7 @@ const BeststoresForm = () => {
   // States for banner form
  
   const [bannerImage, setBannerImage] = useState(null);
+  const [bannerLogo, setBannerLogo] = useState(null);
   const [banners, setBanners] = useState([]);
   const [bannerEditId, setBannerEditId] = useState(null);
   const [isBannerOpen, setIsBannerOpen] = useState(false);
@@ -468,16 +470,25 @@ const BeststoresForm = () => {
         // Get image URL
         bannerimgUrl = await getDownloadURL(storageRef);
       }
+      let bannerlogoUrl = '';
+      if (bannerlogo) {
+        // Upload image to Firebase Storage
+        const storage = getStorage();
+        const storageRef = ref(storage, `images/${bannerlogo.name}`);
+        await uploadBytes(storageRef, bannerlogo);
+        // Get image URL
+        bannerlogoUrl = await getDownloadURL(storageRef);
+      }
 
       if (editId) {
         // Update existing store
         const storeDocRef = doc(db, 'beststores', editId);
-        await updateDoc(storeDocRef, { title, discount, imageUrl,link,name,bannerimgUrl,category});
+        await updateDoc(storeDocRef, { title, discount, imageUrl,link,name,bannerimgUrl,bannerlogoUrl,category});
         toast.success('Store updated successfully!');
       } else {
         // Add new store
         const storesCollectionRef = collection(db, 'beststores');
-        await addDoc(storesCollectionRef, { title, discount, imageUrl,link,name,bannerimgUrl,category });
+        await addDoc(storesCollectionRef, { title, discount, imageUrl,link,name,bannerimgUrl,bannerlogoUrl,category });
         toast.success('Store added successfully!');
       }
 
@@ -485,6 +496,7 @@ const BeststoresForm = () => {
       setTitle('');
       setName('');
       setBannerimg(null);
+      setBannerlogo(null);
       setDiscount('');
       setCategory('');
       setImage(null);
@@ -502,6 +514,7 @@ const BeststoresForm = () => {
     setTitle(store.title);
     setName(store.name);
     setBannerimg(store.bannerimgUrl);
+    setBannerlogo(store.bannerlogoUrl);
     setDiscount(store.discount);
     setCategory(store.category);
     setLink(store.link);
@@ -534,22 +547,35 @@ const BeststoresForm = () => {
         // Get banner image URL
         bannerImageUrl = await getDownloadURL(storageRef);
       }
+      let bannerLogoUrl = '';
+      if (bannerLogo) {
+        // Upload banner image to Firebase Storage
+        const storage = getStorage();
+        const storageRef = ref(storage, `banners/${bannerLogo.name}`);
+        await uploadBytes(storageRef, bannerLogo);
+        // Get banner image URL
+        bannerLogoUrl = await getDownloadURL(storageRef);
+      }
 
       if (bannerEditId) {
         // Update existing banner
         const bannerDocRef = doc(db, 'beststore banners', bannerEditId);
-        await updateDoc(bannerDocRef, {  bannerImageUrl });
+        await updateDoc(bannerDocRef, {  bannerImageUrl,bannerLogoUrl
+
+
+         });
         toast.success('Banner updated successfully!');
       } else {
         // Add new banner
         const bannersCollectionRef = collection(db, 'beststore banners');
-        await addDoc(bannersCollectionRef, {  bannerImageUrl });
+        await addDoc(bannersCollectionRef, {  bannerImageUrl,bannerLogoUrl });
         toast.success('Banner added successfully!');
       }
 
       // Clear form
       
       setBannerImage(null);
+      setBannerLogo(null);
       setBannerEditId(null);
       setIsBannerOpen(false);
       fetchBanners();
@@ -561,7 +587,8 @@ const BeststoresForm = () => {
 
   const handleBannerEdit = (banner) => {
  
-    setBannerImage(banner.bannerImageUrl); // Optional: Handle image preview or URL
+    setBannerImage(banner.bannerImageUrl);
+    setBannerLogo(banner.bannerLogoUrl); // Optional: Handle image preview or URL
     setBannerEditId(banner.id);
     setIsBannerOpen(true);
   };
@@ -630,6 +657,7 @@ const BeststoresForm = () => {
     <thead>
       <tr className='border-b'>
        
+        <th className="px-4 py-2">Logo</th>
         <th className="px-4 py-2">Image</th>
         <th className="px-4 py-2">Actions</th>
       </tr>
@@ -638,6 +666,11 @@ const BeststoresForm = () => {
       {banners.map((banner) => (
         <tr key={banner.id}>
           
+          <td className="px-4 py-2 border-b">
+            {banner.bannerImageUrl && (
+              <img src={banner.bannerLogoUrl} alt={banner.title} className="w-auto h-10 " />
+            )}
+          </td>
           <td className="px-4 py-2 border-b">
             {banner.bannerImageUrl && (
               <img src={banner.bannerImageUrl} alt={banner.title} className="w-auto h-10 " />
@@ -753,6 +786,7 @@ const BeststoresForm = () => {
                 <th className="px-4 py-2">Image</th>
                 <th className="px-4 py-2"> Name</th>
                 <th className="px-4 py-2">Banner Image</th>
+                <th className="px-4 py-2">Banner Logo</th>
                 <th className="px-4 py-2">Category</th>
                 <th className="px-4 py-2">Actions</th>
               </tr>
@@ -771,6 +805,11 @@ const BeststoresForm = () => {
                   <td className="px-4 py-2 border-b">
                     {store.bannerimgUrl && (
                       <img src={store.bannerimgUrl} alt={store.name} className="w-auto h-10 " />
+                    )}
+                  </td>
+                  <td className="px-4 py-2 border-b">
+                    {store.bannerlogoUrl && (
+                      <img src={store.bannerlogoUrl} alt={store.name} className="w-auto h-10 " />
                     )}
                   </td>
                   <td className="px-4 py-2 font-bold border-b">{store.category}</td>
@@ -1295,6 +1334,14 @@ const BeststoresForm = () => {
             />
           </div>
           <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Banner Logo</label>
+            <input
+              type="file"
+              onChange={(e) => setBannerlogo(e.target.files[0])}
+              className="block w-full text-sm text-gray-500 border border-gray-300 rounded-md cursor-pointer focus:outline-none focus:ring-green-500 focus:border-green-500"
+            />
+          </div>
+          <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">Categories</label>
             <select
               value={category}
@@ -1352,7 +1399,14 @@ const BeststoresForm = () => {
               </button>
               <form onSubmit={handleBannerSubmit}>
               
-               
+              <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">Logo</label>
+                  <input
+                    type="file"
+                    onChange={(e) =>setBannerLogo(e.target.files[0])}
+                    className="block w-full text-sm text-gray-500 border border-gray-300 rounded-md cursor-pointer focus:outline-none focus:ring-green-500 focus:border-green-500"
+                  />
+                </div>
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700">Image</label>
                   <input

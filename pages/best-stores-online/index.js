@@ -93,20 +93,27 @@ const Popularstores = () => {
 
   return (
     <div className='mt-[70px]'>
-      <div className="relative flex flex-col items-center justify-center w-full h-auto lg:flex-row lg:h-[11rem]">
-      <div className="flex flex-col w-full lg:hidden mb-2  text-center  lg:w-2/3  h-[90px] lg:h-[130px] lg:ml-2 lg:mt-0">
+      <div className="relative flex px-2  items-center justify-center w-full h-auto lg:flex-row lg:h-[11rem]">
+      <div className="  flex flex-row  mb-2  text-center mr-1   w-1/3  h-[90px] lg:h-[130px] lg:mx-2  mt-1  lg:mt-2">
+        
         
         <div key={banner.id} className="relative w-full h-full overflow-hidden">
+          <img 
+            src={banner.bannerLogoUrl} 
+            alt={`Banner ${banner.id}`}
+            className="object-cover w-full h-full"
+          />
+        </div>
+            </div>
+      <div className="   relative mb-1 bg-green-500 lg:mb-0 lg:mr-2 w-full w-2/3 h-[90px] lg:h-[130px] flex flex-row  space-x-7  lg:space-y-2">
+      <div key={banner.id} className="relative w-full h-full overflow-hidden">
           <img 
             src={banner.bannerImageUrl} 
             alt={`Banner ${banner.id}`}
             className="object-cover w-full h-full"
           />
         </div>
-    
-            </div>
-      <div className="p-1 hidden  relative mb-1 bg-green-500 lg:mb-0 lg:mr-2 w-full lg:w-[30%] h-[90px] lg:h-[130px] lg:flex lg:flex-col flex-row space-x-7  lg:space-y-2">
-          <span className="relative inline-block mb-1 mr-2 lg:mb-2 lg:top-0 top-7 ">
+     {/* <span className="relative inline-block mb-1 mr-2 lg:mb-2 lg:top-0 top-7 ">
             <h1 className="font-bold text-white lg:text-center text-start lg:text-4xl">Best stores </h1>
             <span className="absolute hidden sm:block bottom-[-4px] left-24 lg:left-24 lg:w-[200px] w-[160px] h-[2px] bg-white"></span>
           </span>
@@ -123,21 +130,14 @@ const Popularstores = () => {
       <FaFacebook size={40} className="text-blue-500 hover:scale-125 mobile-size" />
     
             </div>
-          </div>
-        </div>
-        <div className="flex flex-col w-full hidden sm:block  text-center  lg:w-2/3  h-[90px] lg:h-[130px] lg:ml-2 lg:mt-0">
-        
-    <div key={banner.id} className="relative w-full h-full overflow-hidden">
-      <img 
-        src={banner.bannerImageUrl} 
-        alt={`Banner ${banner.id}`}
-        className="object-cover w-full h-full"
-      />
-    </div>
-
+          </div> */}
         </div>
       
-        <div className="flex justify-center w-full px-4 mt-4 mb-4 lg:hidden md:hidden">
+      
+        
+
+      </div>
+      <div className="flex justify-center w-full px-4 mt-4 mb-4 lg:hidden md:hidden">
   <div className="flex flex-row space-x-4 p-2 justify-between border-red-500 border bg-white w-full max-w-[400px]  rounded-md">
     <button className="flex items-center text-white text-[12px] p-2 bg-red-500 font-bold rounded-3xl btn-join-now">
       Join Now
@@ -148,8 +148,6 @@ const Popularstores = () => {
     <FaFacebook size={30} className="text-blue-500 transition-transform duration-300 hover:scale-125" />
   </div>
 </div>
-
-      </div>
 
       <div className="lg:hidden md:hidden w-40% px-4">
       <div className="mb-4 w-[350px] lg:hidden md:hidden">

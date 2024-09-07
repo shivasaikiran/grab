@@ -107,42 +107,51 @@ const StoreDetail = () => {
   return (
     <div className='mt-16 lg:mt-[70px]'>
       {/* Banner Section */}
-      <div className="relative flex flex-col items-center justify-center w-full h-auto lg:flex-row lg:h-[11rem]">
-        <div className="p-1 hidden relative mb-4 bg-green-500 lg:mb-0 lg:mr-2 w-full lg:w-[30%] h-auto lg:h-[130px] lg:flex flex-col space-y-2">
-        <span className="relative inline-block mb-2 mr-2">
-  <h1 className="text-4xl font-bold text-center text-white ">
-    {store.name}
-  </h1>
-  {/* Underline span adjusted to text width */}
- 
-</span>
-
-          <div className="flex justify-center">
-            <div className="flex flex-row space-x-2 p-2 border-red-500 mt- lg:space-x-6 border bg-white w-[300px] justify-center rounded-md">
-              <button className="flex items-center btn-join-now">
-                Join Now
-                <span className='ml-2'><FaArrowRight /></span>
-              </button>
-              <FaInstagram size={40} className="icon-instagram hover:scale-125" />
-              <FaWhatsapp size={40} className="icon-whatsapp hover:scale-125" />
-              <FaFacebook size={40} className="text-blue-500 hover:scale-125" />
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col w-full mt-2   text-center  lg:w-2/3  h-[90px] lg:h-[130px] lg:ml-2 lg:mt-0">
+      <div className="relative flex px-2  items-center justify-center w-full h-auto lg:flex-row lg:h-[11rem]">
+      <div className="  flex flex-row  mb-2  text-center mr-1   w-1/3  h-[90px] lg:h-[130px] lg:mx-2  mt-1  lg:mt-2">
+        
         
         <div key={store.id} className="relative w-full h-full overflow-hidden">
           <img 
-            src={store.bannerimgUrl} 
-            alt={`Banner ${store
-              .id}`}
+            src={store.bannerlogoUrl} 
+            alt={`Banner ${store.id}`}
             className="object-cover w-full h-full"
           />
         </div>
-        
+            </div>
+      <div className="   relative mb-1 bg-green-500 lg:mb-0 lg:mr-2 w-full w-2/3 h-[90px] lg:h-[130px] flex flex-row  space-x-7  lg:space-y-2">
+      <div key={store.id} className="relative w-full h-full overflow-hidden">
+          <img 
+            src={store.bannerimgUrl} 
+            alt={`Banner ${store.id}`}
+            className="object-cover w-full h-full"
+          />
+        </div>
+     {/* <span className="relative inline-block mb-1 mr-2 lg:mb-2 lg:top-0 top-7 ">
+            <h1 className="font-bold text-white lg:text-center text-start lg:text-4xl">Best stores </h1>
+            <span className="absolute hidden sm:block bottom-[-4px] left-24 lg:left-24 lg:w-[200px] w-[160px] h-[2px] bg-white"></span>
+          </span>
+          <div className="flex justify-center">
+            <div className="flex flex-row space-x-2 p-1 relative lg:top-0 top-5 border-red-500 lg:h-12 h-10 lg:space-x-6 border bg-white lg:w-[300px] w-[250px] justify-center rounded-md">
+            <button className="flex items-center btn-join-now">
+  Join Now
+  <span className='ml-2'><FaArrowRight/></span>
+</button>
+
+
+      <FaInstagram size={40} className="icon-instagram hover:scale-125 mobile-size" />
+      <FaWhatsapp size={40} className="icon-whatsapp hover:scale-125 mobile-size" />
+      <FaFacebook size={40} className="text-blue-500 hover:scale-125 mobile-size" />
     
             </div>
-            <div className="flex justify-center w-full px-4 mt-4 mb-4 lg:hidden md:hidden">
+          </div> */}
+        </div>
+      
+      
+        
+
+      </div>
+      <div className="flex justify-center w-full px-4 mt-4 mb-4 lg:hidden md:hidden">
   <div className="flex flex-row space-x-4 p-2 justify-between border-red-500 border bg-white w-full max-w-[400px]  rounded-md">
     <button className="flex items-center text-white text-[12px] p-2 bg-red-500 font-bold rounded-3xl btn-join-now">
       Join Now
@@ -153,26 +162,6 @@ const StoreDetail = () => {
     <FaFacebook size={30} className="text-blue-500 transition-transform duration-300 hover:scale-125" />
   </div>
 </div>
-<div className="lg:hidden md:hidden w-40% px-6">
-      <div className="mb-4 w-[350px] lg:hidden md:hidden">
-          <h2 className="text-2xl font-bold text-black sm:text-3xl">
-          <span className="relative inline-block">
-              {store.name}
-              <span className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-[#26ca43]"></span>
-            </span>
-          </h2>
-        </div>
-     
-      
-     
-        
-    
-    
-
-
-      </div>
-
-      </div>
 
       {/* Banners Section */}
       <div className="flex flex-col px-6 md:flex-row">
